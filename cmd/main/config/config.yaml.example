@@ -1,0 +1,10 @@
+ipfiles:
+  - cloudplatform: google 
+    url: https://www.gstatic.com/ipranges/cloud.json
+    downloadfilename: "google-cloud.json"
+  - cloudplatform: google 
+    url: https://www.gstatic.com/ipranges/goog.json
+    downloadfilename: "goog.json"
+downloaddir: "downloadfiles/"
+dbfile : cloudIP.sqlite3.db
+dbdir  : "output/"
