@@ -1,5 +1,5 @@
 # Cloud IP to DB
-This project creates a SQLite database containing CIDR records from large Cloud Providers platforms. Currently, the project imports IP CIDR networks from the following:
+This project creates a SQLite database containing CIDR records from large and large-ish Cloud Providers platforms. Currently, the project imports IP CIDR networks from the following:
 
 - Amazon Web Services (AWS)
 - Google Cloud (GCP)
@@ -9,6 +9,7 @@ This project creates a SQLite database containing CIDR records from large Cloud 
 - Oracle Cloud
 - Linode
 - IBM Cloud
+- GitHub
 
 # Technology Stack
 
