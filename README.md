@@ -7,6 +7,8 @@ This project creates a SQLite database containing CIDR records from large Cloud 
 - Microsoft Azure (Azure)
 - CloudFlare
 - Oracle Cloud
+- Linode
+- IBM Cloud
 
 # Technology Stack
 
