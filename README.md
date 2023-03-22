@@ -36,7 +36,7 @@ These instructions describe how to use the sqlite file on your workstation for l
 ## Method 1
 The easiest method, simply download the latest cloudIP.sqlite3.db file from the releases section.
 
-https://github.com/stclaird/cloudIPtoDB/releases/latest
+https://github.com/piuniverse/cloudIPtoDB/releases/latest
 
 Then from the command prompt run the sqlite command and specify the newly download file path.
 
@@ -49,7 +49,7 @@ Use this version to build the binary and create the sqllite database file with t
 
 Check out this repository
 ```
-git clone git@github.com:stclaird/cloudIPtoDB.git
+git clone git@github.com:piuniverse/cloudIPtoDB.git
 ```
 Change directory to the cmd folder
 ```
@@ -88,14 +88,14 @@ select count(*) from net;
 select count(*) from net where cloudplatform='aws';
 ```
 
-or from cloudflare
+### Get the CIDR records from cloudflare
 ```
 cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
 ```
 ```
 sqlite> select * from net where cloudplatform='cloudflare';
 1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
-<SNIP>
+<MANY MORE RECORDS SNIP>
 sqlite> 
 ```
 
