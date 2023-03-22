@@ -29,29 +29,28 @@ CREATE TABLE IF NOT EXISTS net (
 	iptype TEXT NOT NULL
 	);`
 
-
-func SetupDB(db *sql.DB){
+func SetupDB(db *sql.DB) {
 	_, err := db.Exec(createNetDB)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func AddCidr(db *sql.DB, newCidr CidrObject) {
+func AddCidr(db *sql.DB, newCidr CidrObject) error {
 	//Add a Cidr
 	stmt, err := db.Prepare("INSERT INTO net ( net_id, net, start_ip, end_ip, url, cloudplatform, iptype) VALUES ( ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Printf("Prepare Error: %s %s %s", newCidr.Cloudplatform, newCidr.Net, err)
-		return
+		return err
 	}
 	res, err := stmt.Exec(newCidr.Start_ip, newCidr.Net, newCidr.Start_ip, newCidr.End_ip, newCidr.Url, newCidr.Cloudplatform, newCidr.Iptype)
 	if err != nil {
 		log.Printf("Insert Error: %s %s %s", newCidr.Cloudplatform, newCidr.Net, err)
-		return
+		return err
 	}
 
 	res.LastInsertId()
-	return
+	return err
 }
 
 func GetCidr(db *sql.DB) {

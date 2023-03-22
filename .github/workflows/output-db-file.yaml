@@ -1,0 +1,49 @@
+name: Output CloudIPtoDB DB File
+
+on:
+  schedule:
+    - cron:  '0 0 1 * *'
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout CloudIP
+        uses: actions/checkout@v3
+        with:
+          repository: piuniverse/cloudIPtoDB
+
+      - name: Create SQLite File
+        run: |-
+          ls -lasi
+          cd cmd/main/
+          go build -o cloudIPtoDB -v 
+          chmod +x cloudIPtoDB
+          ./cloudIPtoDB
+
+      - name: Temporarily save SQLite db
+        uses: actions/upload-artifact@v2
+        with:
+          name: db-artifact
+          path: cmd/main/output/cloudIP.sqlite3.db
+          retention-days: 1
+      
+      - name: Retrieve saved SQLite db
+        uses: actions/download-artifact@v2
+        with:
+          name: db-artifact
+          path: cmd/api/cloudIP.sqlite3.db
+      - run:   |
+          upload_url=$(curl -sL https://api.github.com/repos/actions/checkout/releases/latest | jq -r '.upload_url')
+          echo UPLOAD_URL=$upload_url >> $GITHUB_ENV
+
+      - name: Upload latest version cloudIPtoDB
+        run: |
+          cd cmd/main/output
+          TAG=$(gh release view --json name --jq .name)
+          gh release upload ${TAG} cloudIP.sqlite3.db --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLASSIC_PAT_TOKEN }}

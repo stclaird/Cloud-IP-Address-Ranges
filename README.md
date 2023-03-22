@@ -1,5 +1,5 @@
 # Cloud IP to DB
-This project creates is a simple to that creates a SQLite database containing CIDR records from large and large-ish cloud or hosting provider platforms. Currently, the project imports IP CIDR networks from the following:
+A simple tool for importing CIDR records from large and large-ish cloud or hosting providers and outputs them as a SQLlite database. Currently, the project imports IP CIDR networks from the following providers:
 
 - Amazon Web Services (AWS)
 - Google Cloud (GCP)
@@ -34,7 +34,7 @@ The SQLite database schema is made up of a single 'net' table
 These instructions describe how to use the sqlite file on your workstation for local querying
 
 ## Method 1
-The easiest method, simply download the latest cloudIP.sqlite3.db file from the releases section.
+The easiest method, ensure you have [SQLite](https://www.sqlite.org/download.html) installed and then simply download the latest cloudIP.sqlite3.db file from the releases section.
 
 https://github.com/piuniverse/cloudIPtoDB/releases/latest
 
@@ -93,7 +93,6 @@ select count(*) from net where cloudplatform='aws';
 cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
 ```
 ```
-sqlite> select * from net where cloudplatform='cloudflare';
 1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
 <MANY MORE RECORDS SNIP>
 sqlite> 

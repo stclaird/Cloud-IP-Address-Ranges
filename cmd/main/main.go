@@ -54,9 +54,17 @@ func init() {
 
 func main() {
 
+	var report []reportEntry //initiate a report struct to keep track of imports
+
 	for _, i := range confObj.Ipfiles {
 
 		var cidrs []string
+
+		var entry = reportEntry{
+			CloudPlatform: i.Cloudplatform,
+			Success:       0,
+			Failed:        0,
+		}
 
 		downloadto := fmt.Sprintf("%s/%s", confObj.Downloaddir, i.DownloadFileName)
 
@@ -93,11 +101,19 @@ func main() {
 					Iptype:        processedCidr.Iptype,
 				}
 
-				models.AddCidr(db, c)
+				err := models.AddCidr(db, c)
+
+				if err != nil {
+					entry.IncrementFailed()
+				} else {
+					entry.IncrementSuccess()
+				}
 
 			}
-
 		}
+		report = append(report, entry)
 	}
+
+	printReport(report)
 
 }
