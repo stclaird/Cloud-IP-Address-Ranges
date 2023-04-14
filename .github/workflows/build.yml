@@ -1,4 +1,4 @@
-name: Build CloudIPtoDB
+name: Build & Test Binary
 
 on:
   push:
