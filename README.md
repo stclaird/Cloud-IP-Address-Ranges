@@ -102,7 +102,7 @@ sqlite>
 
 The records in the database are in CIDR network format, and not unpacked into individual IP addresses. 
 Unpacking the CIDRs into a individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
-However, the downside of not having individual IP addresses stored as seperate records will make querying for IPs using SQL difficult.
+However, the downside of not having individual IP addresses stored as seperate records is it doesl make querying for IPs using SQL difficult.
 
 To remedy this and allow for the querying of individual IP addresses we also store some additonal columns along side the CIDR record, the start (network) and end (broadcast) address. These records are both stored as integers and this means we are able to query whether a specific IP address record exists in the database by testing if the IP address falls between the start record and the end record.
 
