@@ -82,7 +82,7 @@ The following section gives examples on how to query the database using SQL stat
 select count(*) from net;
 ```
 
-### 2. To get the number of CIDR records held in the database belong to the cloud platform AWS.
+### 2. To get the number of CIDR records held in the database that belong to the cloud platform AWS.
 
 ```
 select count(*) from net where cloudplatform='aws';
