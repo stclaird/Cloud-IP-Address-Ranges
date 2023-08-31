@@ -33,7 +33,6 @@ func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 	// Create the file
 	fileOut, err := os.Create(DownloadFileName)
 	if err != nil {
-		fmt.Print("cat")
 		return err
 	}
 	defer fileOut.Close()
@@ -141,7 +140,7 @@ func AsText[T any](DownloadFileName string) []string {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 
 	return cidrs
@@ -149,7 +148,6 @@ func AsText[T any](DownloadFileName string) []string {
 
 func (a *IpfileTXT) Process(cidrs []string) []string {
 	for _, val := range a.Prefixes {
-		fmt.Println("VAL: ", val)
 		exists := StrInSlice(val, cidrs)
 		if exists == false {
 			cidrs = append(cidrs, val)

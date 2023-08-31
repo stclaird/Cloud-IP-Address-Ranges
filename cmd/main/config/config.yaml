@@ -1,20 +1,20 @@
 ipfiles:
   - cloudplatform: "github"
     url: https://api.github.com/meta
-    downloadfilename: gitub.txt
+    downloadfilename: github.txt
   - cloudplatform: ibm
     url: "https://raw.githubusercontent.com/ibm-cloud-docs/hardware-firewall-shared/master/ips.md"
-    downloadfilename: ibm-txt
+    downloadfilename: ibm.txt
   - cloudplatform: azure
     url: "https://www.microsoft.com/en-us/download/details.aspx?id=56519"
     downloadfilename: "azure-public-cloud.json"
-  - cloudplatform: google 
+  - cloudplatform: google
     url: https://www.gstatic.com/ipranges/cloud.json
     downloadfilename: "google-cloud.json"
-  - cloudplatform: google 
+  - cloudplatform: google
     url: https://www.gstatic.com/ipranges/goog.json
     downloadfilename: "goog.json"
-  - cloudplatform: aws 
+  - cloudplatform: aws
     url: https://ip-ranges.amazonaws.com/ip-ranges.json
     downloadfilename: "aws-ips.json"
   - cloudplatform: digitalocean
