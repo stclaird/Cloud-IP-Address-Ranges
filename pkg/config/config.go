@@ -11,7 +11,7 @@ import (
 type Config struct {
 	Dbfile      string                //The name of the database file.
 	Dbdir       string                //The database output directory
-	Downloaddir string                //The directory where cloud IP files are downloaed to.
+	Downloaddir string                //The directory where cloud IP files are downloaded to.
 	Ipfiles     []ipfile.DownloadFile //The details of the vendor IP Files to be converted to SQL such as their URLs
 }
 
