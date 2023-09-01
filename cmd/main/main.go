@@ -83,7 +83,7 @@ func main() {
 		var FileObj ipfile.IpfileTXT
 		FileObj.Download(downloadto, url)
 		cidrs_raw := ipfile.AsText[ipfile.IpfileTXT](downloadto)
-		cidrs = FileObj.Process(cidrs_raw)
+		cidrs = ipfile.Process(cidrs_raw)
 
 		for _, cidr := range cidrs {
 			processedCidr, err := ipnet.PrepareCidrforDB(cidr)

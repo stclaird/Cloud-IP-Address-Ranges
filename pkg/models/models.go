@@ -20,8 +20,7 @@ type CidrObject struct {
 
 const createNetDB string = `
 CREATE TABLE IF NOT EXISTS net (
-	net_id INTEGER PRIMARY KEY,
-	net TEXT NOT NULL,
+	net TEXT PRIMARY KEY,
 	start_ip INT NOT NULL,
 	end_ip INT NOT NULL,
 	url TEXT NOT NULL,
@@ -38,12 +37,12 @@ func SetupDB(db *sql.DB) {
 
 func AddCidr(db *sql.DB, newCidr CidrObject) error {
 	//Add a Cidr
-	stmt, err := db.Prepare("INSERT INTO net ( net_id, net, start_ip, end_ip, url, cloudplatform, iptype) VALUES ( ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO net ( net, start_ip, end_ip, url, cloudplatform, iptype) VALUES ( ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Printf("Prepare Error: %s %s %s", newCidr.Cloudplatform, newCidr.Net, err)
 		return err
 	}
-	res, err := stmt.Exec(newCidr.Start_ip, newCidr.Net, newCidr.Start_ip, newCidr.End_ip, newCidr.Url, newCidr.Cloudplatform, newCidr.Iptype)
+	res, err := stmt.Exec( newCidr.Net, newCidr.Start_ip, newCidr.End_ip, newCidr.Url, newCidr.Cloudplatform, newCidr.Iptype)
 	if err != nil {
 		log.Printf("Insert Error: %s %s %s", newCidr.Cloudplatform, newCidr.Net, err)
 		return err

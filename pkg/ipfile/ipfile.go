@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -64,6 +65,17 @@ type IpfileJson struct {
 type IpfileTXT struct {
 	Common
 	Prefixes []string
+}
+
+func IPtoCidr(str_in string)(string) {
+	//Ensure an IP address has a slash (cidr Notation)
+	contains := strings.Contains(str_in, "/")
+
+	if contains {
+		return str_in
+	} else {
+		return fmt.Sprintf("%s/32", str_in)
+	}
 }
 
 func MatchIp(pattern string) []string {
@@ -148,15 +160,16 @@ func AsText[T any](DownloadFileName string) []string {
 	return cidrs
 }
 
-func (a *IpfileTXT) Process(cidrs []string) []string {
-	for _, val := range a.Prefixes {
-		exists := StrInSlice(val, cidrs)
+func Process(cidrs_in []string) (cidrs_out []string) {
+	for _, val := range cidrs_in {
+		val = IPtoCidr(val)
+		exists := StrInSlice(val, cidrs_out)
 		if exists == false {
-			cidrs = append(cidrs, val)
+			cidrs_out = append(cidrs_out, val)
 		}
 	}
 
-	return cidrs
+	return cidrs_out
 }
 
 func ResolveAzureDownloadUrl() string {
