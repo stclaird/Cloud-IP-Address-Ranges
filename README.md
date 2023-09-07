@@ -20,7 +20,7 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 | Alibaba					| from ASN Prefix				|
 
 # NOTES:
-The IP info is extracted from offical APIs and pages published by the providers themselves. Except when it isn't! Not all providers provide this information publicly - and when it, isn't it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
+The IP info is extracted from offical APIs and pages published by the providers themselves. Except when it isn't! Not all providers provide this information publicly - and when it isn't, it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
 
 I believe the ASN info could be less accurate as some hosts use ASNs from a parent company which may have more than one seperate entity/company. 
 For example, the ASN AS20473 that advertises IP Cidr prefixes for Vultr hosting  is actually registered "The Constant Company, LLC" and is shared by other orgs that seem distinct from Vultr. So I have left Vultr out of this for now.
