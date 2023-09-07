@@ -64,7 +64,7 @@ ipfiles:
     downloadfilename: godaddy-AS26496.txt
 
   - cloudplatform: "godaddy"
-    url: https://api.hackertarget.com/aslookup/?q=AS26496
+    url: https://api.hackertarget.com/aslookup/?q=AS30083
     downloadfilename: godaddy-AS30083.txt
 
   - cloudplatform: "dreamhost"
