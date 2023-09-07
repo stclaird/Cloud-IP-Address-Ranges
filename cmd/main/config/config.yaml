@@ -55,3 +55,22 @@ ipfiles:
     url: https://geoip.linode.com/
     downloadfilename: linode.txt
 
+  - cloudplatform: "a2hosting"
+    url: https://api.hackertarget.com/aslookup/?q=AS55293
+    downloadfilename: a2hosting.txt
+
+  - cloudplatform: "godaddy"
+    url: https://api.hackertarget.com/aslookup/?q=AS26496
+    downloadfilename: godaddy-AS26496.txt
+
+  - cloudplatform: "godaddy"
+    url: https://api.hackertarget.com/aslookup/?q=AS26496
+    downloadfilename: godaddy-AS30083.txt
+
+  - cloudplatform: "dreamhost"
+    url: https://api.hackertarget.com/aslookup/?q=AS26347
+    downloadfilename: dreamhost-AS26347.txt
+
+  - cloudplatform: "alibaba"
+    url: https://api.hackertarget.com/aslookup/?q=AS45102
+    downloadfilename: alibaba-AS45102.txt

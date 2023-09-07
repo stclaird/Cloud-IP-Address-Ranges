@@ -1,15 +1,24 @@
 # Cloud IP to DB
 A simple tool for importing CIDR records from large and large-ish cloud or hosting providers and outputs them as a SQLlite database. Currently, the project imports IP CIDR networks from the following providers:
 
-- Amazon Web Services (AWS)
-- Google Cloud (GCP)
-- Digital Ocean (DO)
-- Microsoft Azure (Azure)
-- CloudFlare
-- Oracle Cloud
-- Linode
-- IBM Cloud
-- GitHub
+| Provider                  | Method                       |
+| ------------------------- | ---------------------------- |
+| Amazon Web Services (AWS) | downloaded from provider url |
+| Google Cloud (GCP)		| downloaded from provider url |
+| Digital Ocean (DO)		| downloaded from provider url |
+| Microsoft Azure (Azure)	| downloaded from provider url |
+| CloudFlare				| downloaded from provider url |
+| Oracle Cloud				| downloaded from provider url |
+| Linode     				| downloaded from provider url |
+| IBM						| downloaded from provider github page |
+| IBM/Softlayer				| from ASN Prefix				|
+| GoDaddy					| from ASN Prefix				|
+| A2Hosting					| from ASN Prefix				|
+| Dreamhost					| from ASN Prefix				|
+| Vercel\AWS				| from ASN Prefix				|
+| Heroku\AWS				| from ASN Prefix				|
+| Alibaba					| from ASN Prefix				|
+
 
 # Technology Stack
 
@@ -95,25 +104,25 @@ cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
 ```
 1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
 <MANY MORE RECORDS SNIP>
-sqlite> 
+sqlite>
 ```
 
 3. Find if a specific IP address exists in one of the cidrs held in the database.
 
-The records in the database are in CIDR network format, and not unpacked and stored as individual IP addresses. 
+The records in the database are in CIDR network format, and not unpacked and stored as individual IP addresses.
 Unpacking the CIDRs into a individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
 However, the downside of not having individual IP addresses stored as seperate records is it does make querying for IPs using SQL difficult.
 
 To remedy this and allow for the querying of individual IP addresses we also store some additonal columns along side the CIDR record, the start (network) and end (broadcast) address. These records are both stored as integers and this means we are able to query whether a specific IP address record exists in the database by testing if the IP address falls between the start record and the end record.
 
-One thing though, for this to work you do need to convert your IP address to an integer before running a query. 
+One thing though, for this to work you do need to convert your IP address to an integer before running a query.
 For example, if you want to know if the IP address `177.71.207.129` is within one of the CIDR records stored in the database:
 
 Firstly, you need to convert this IPv4 address to a decimal integer, which is 2974273409. Once you have the IP as an integer you can then perform the following query, where the value for the start_ip and end_ip columns are this integer:
 
 ```
-SELECT cloudplatform, net 
-FROM net 
+SELECT cloudplatform, net
+FROM net
 WHERE start_ip <= '2974273409'
 AND end_ip >= '2974273409';
 ```
