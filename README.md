@@ -1,5 +1,5 @@
 # Cloud IP to DB
-A simple tool for importing CIDR records from large and large-ish cloud or hosting providers and outputs them as a SQLlite database. Currently, the project imports IP CIDR networks from the following providers:
+A simple tool for importing IP and CIDR records from large and large-ish cloud or hosting providers and outputs them as a SQLlite database and clear text files. Currently, the project imports IP CIDR networks from the following providers:
 
 | Provider                  | Method                       |
 | ------------------------- | ---------------------------- |
@@ -19,6 +19,7 @@ A simple tool for importing CIDR records from large and large-ish cloud or hosti
 | Heroku\AWS				| from ASN Prefix				|
 | Alibaba					| from ASN Prefix				|
 
+The IP info is extracted from offical APIs and pages from the providers themselves. Except when it isn't - in those cases it is extracted from ASN prefix information. Currently using the info provided by the splendid folks at hackertarget
 
 # Technology Stack
 
