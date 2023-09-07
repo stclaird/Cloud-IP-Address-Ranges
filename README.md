@@ -19,7 +19,13 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 | Heroku\AWS				| from ASN Prefix				|
 | Alibaba					| from ASN Prefix				|
 
-The IP info is extracted from offical APIs and pages from the providers themselves. Except when it isn't - in those cases it is extracted from ASN prefix information. Currently using the info provided by the splendid folks at hackertarget
+# NOTES:
+The IP info is extracted from offical APIs and pages published by the providers themselves. Except when it isn't! Not all providers provide this information publicly - and when it, isn't it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
+
+I believe the ASN info could be less accurate as some hosts use ASNs from a parent company which may have more than one seperate entity/company. 
+For example, the ASN AS20473 that advertises IP Cidr prefixes for Vultr hosting  is actually registered "The Constant Company, LLC" and is shared by other orgs that seem distinct from Vultr. So I have left Vultr out of this for now.
+
+In the case of AWS, Vercel and Heroku - Vercel and Heroku are hosted by AWS. So the AWS provided IP list should be enough, or so you might think. However, there are additional prefixes advertised in ASNs that Vercel and Heroku use that are not on the AWS list.  
 
 # Technology Stack
 
