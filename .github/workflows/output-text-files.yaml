@@ -23,7 +23,7 @@ jobs:
           ls -lasi
           cd downloadedfiles
           ls -lasi
-          tar -cvf downloadfiles.tar *.ip.txt
+          tar -cvf downloadedfiles.tar *.ip.txt
           ls -lasi
 
       - name: Temporarily save Tar Files
