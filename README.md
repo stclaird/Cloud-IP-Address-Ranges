@@ -3,21 +3,22 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 
 | Provider                  | Method                       |
 | ------------------------- | ---------------------------- |
-| Amazon Web Services (AWS) | downloaded from provider url |
-| Google Cloud (GCP)		| downloaded from provider url |
-| Digital Ocean (DO)		| downloaded from provider url |
-| Microsoft Azure (Azure)	| downloaded from provider url |
-| CloudFlare				| downloaded from provider url |
-| Oracle Cloud				| downloaded from provider url |
-| Linode     				| downloaded from provider url |
-| IBM						| downloaded from provider github page |
-| IBM/Softlayer				| from ASN Prefix				|
-| GoDaddy					| from ASN Prefix				|
-| A2Hosting					| from ASN Prefix				|
-| Dreamhost					| from ASN Prefix				|
-| Vercel\AWS				| from ASN Prefix				|
-| Heroku\AWS				| from ASN Prefix				|
-| Alibaba					| from ASN Prefix				|
+| [Amazon Web Services (AWS)](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/aws-ips.ip.txt) | downloaded from provider url |
+| [Google Cloud (GCP)	](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/goog.ip.txt)	| downloaded from provider url |
+| [Digital Ocean (DO)	](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/digitalocean.ip.txt)	| downloaded from provider url |
+| [Microsoft Azure (Azure)](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/azure-public-cloud.ip.txt)	| downloaded from provider url |
+| [CloudFlare](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/cloudflare-ipv4.ip.txt)				| downloaded from provider url |
+|[ Oracle Cloud	](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/oracle-public.ip.txt)			| downloaded from provider url |
+| [Linode](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/linode.ip.txt)     				| downloaded from provider url |
+| [IBM](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/ibm.ip.txt)						| downloaded from provider github page |
+| [IBM/Softlayer	](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/softlayer-ibm.ip.txt)			| from ASN Prefix				|
+| [GoDaddy](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/godaddy-AS26496.ip.txt)					| from ASN Prefix				|
+| [A2Hosting](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/a2hosting.ip.txt)					| from ASN Prefix				|
+| [Dreamhost](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/dreamhost-AS26347.ip.txt)					| from ASN Prefix				|
+| [Vercel](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/vercel-aws.ip.txt)\AWS				| from ASN Prefix				|
+| [Heroku](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/heroku-aws.ip.txt)\AWS				| from ASN Prefix				|
+| [Alibaba](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/alibaba-AS45102.ip.txt)					| from ASN Prefix				|
+| [Dreamhost](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/dreamhost-AS26347.ip.txt)					| from ASN Prefix				|
 
 ## NOTES:
 The IP/Cidr  info is extracted from offical APIs and pages published by the providers themselves. Except when it isn't, as not all providers publish this information publicly - and when it isn't published, it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
