@@ -5,72 +5,72 @@ dbdir  : "output/"
 ipfiles:
   - cloudplatform: "softlayer/ibm"
     url: https://api.hackertarget.com/aslookup/?q=AS36351
-    downloadfilename: softlayer-ibm.txt
+    downloadfilename: softlayer-ibm.ip.txt
 
   - cloudplatform: "github"
     url: https://api.github.com/meta
-    downloadfilename: github.txt
+    downloadfilename: github.ip.txt
 
   - cloudplatform: ibm
     url: "https://raw.githubusercontent.com/ibm-cloud-docs/hardware-firewall-shared/master/ips.md"
-    downloadfilename: ibm.txt
+    downloadfilename: ibm.ip.txt
 
   - cloudplatform: azure
     url: "https://www.microsoft.com/en-us/download/details.aspx?id=56519"
-    downloadfilename: "azure-public-cloud.json"
+    downloadfilename: "azure-public-cloud.ip.txt"
 
   - cloudplatform: google
     url: https://www.gstatic.com/ipranges/cloud.json
-    downloadfilename: "google-cloud.json"
+    downloadfilename: "google-cloud.ip.txt"
 
   - cloudplatform: google
     url: https://www.gstatic.com/ipranges/goog.json
-    downloadfilename: "goog.json"
+    downloadfilename: "goog.ip.txt"
 
   - cloudplatform: aws
     url: https://ip-ranges.amazonaws.com/ip-ranges.json
-    downloadfilename: "aws-ips.json"
+    downloadfilename: "aws-ips.ip.txt"
 
   - cloudplatform: "vercel/aws"
     url: https://api.hackertarget.com/aslookup/?q=AS15169
-    downloadfilename: vercel-aws.txt
+    downloadfilename: vercel-aws.ip.txt
 
   - cloudplatform: "heroku/aws"
     url: https://api.hackertarget.com/aslookup/?q=AS14618
-    downloadfilename: heroku-aws.txt
+    downloadfilename: heroku-aws.ip.txt
 
   - cloudplatform: digitalocean
     url: https://digitalocean.com/geo/google.csv
-    downloadfilename: "digitalocean.csv"
+    downloadfilename: "digitalocean.ip.txt"
 
   - cloudplatform: cloudflare
     url: https://www.cloudflare.com/ips-v4
-    downloadfilename: cloudflare-ipv4.txt
+    downloadfilename: cloudflare-ipv4.ip.txt
 
   - cloudplatform: oracle
     url: https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json
-    downloadfilename: oracle-public.json
+    downloadfilename: oracle-public.ip.txt
 
   - cloudplatform: "linode"
     url: https://geoip.linode.com/
-    downloadfilename: linode.txt
+    downloadfilename: linode.ip.txt
 
   - cloudplatform: "a2hosting"
     url: https://api.hackertarget.com/aslookup/?q=AS55293
-    downloadfilename: a2hosting.txt
+    downloadfilename: a2hosting.ip.txt
 
   - cloudplatform: "godaddy"
     url: https://api.hackertarget.com/aslookup/?q=AS26496
-    downloadfilename: godaddy-AS26496.txt
+    downloadfilename: godaddy-AS26496.ip.txt
 
   - cloudplatform: "godaddy"
     url: https://api.hackertarget.com/aslookup/?q=AS30083
-    downloadfilename: godaddy-AS30083.txt
+    downloadfilename: godaddy-AS30083.ip.txt
 
   - cloudplatform: "dreamhost"
     url: https://api.hackertarget.com/aslookup/?q=AS26347
-    downloadfilename: dreamhost-AS26347.txt
+    downloadfilename: dreamhost-AS26347.ip.txt
 
   - cloudplatform: "alibaba"
     url: https://api.hackertarget.com/aslookup/?q=AS45102
-    downloadfilename: alibaba-AS45102.txt
+    downloadfilename: alibaba-AS45102.ip.txt
