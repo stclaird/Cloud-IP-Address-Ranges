@@ -1,5 +1,5 @@
 # Cloud IP to DB
-A simple tool for importing IP and CIDR records from large and large-ish cloud or hosting providers and outputs them as a [SQLlite database](https://github.com/stclaird/cloudIPtoDB/releases/download/v1.0.0/cloudIP.sqlite3.db) and clear text files. Currently, the project imports IP CIDR networks from the following providers:
+A simple tool for importing IP and CIDR records from large and large-ish cloud or hosting providers and outputs them as a [SQLlite database](https://github.com/stclaird/cloudIPtoDB/releases/download/v1.0.0/cloudIP.sqlite3.db) and [clear text files](https://github.com/stclaird/cloudIPtoDB/tree/main/ipfiles). Currently, the project imports IP CIDR networks from the following providers:
 
 | Provider                  | Method                       |
 | ------------------------- | ---------------------------- |
