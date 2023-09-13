@@ -20,27 +20,8 @@ jobs:
           go build -o cloudIPtoDB -v
           chmod +x cloudIPtoDB
           ./cloudIPtoDB
-          ls -lasi
           cd downloadedfiles
-          ls -lasi
           tar -cvf downloadedfiles.tar *.ip.txt
-          ls -lasi
-
-      # - name: Temporarily save Tar Files
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: db-artifact
-      #     path: cmd/main/downloadedfiles/downloadedfiles.tar
-      #     retention-days: 1
-
-      # - name: Retrieve saved Tar
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: db-artifact
-      #     path: cmd/main/downloadedfiles/downloadedfiles.tar
-      # - run:   |
-      #     tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar
-      
 
       - name: Upload latest version cloudIPtoDB
         run: |
