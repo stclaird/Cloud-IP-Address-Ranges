@@ -26,23 +26,24 @@ jobs:
           tar -cvf downloadedfiles.tar *.ip.txt
           ls -lasi
 
-      - name: Temporarily save Tar Files
-        uses: actions/upload-artifact@v2
-        with:
-          name: db-artifact
-          path: cmd/main/downloadedfiles/downloadedfiles.tar
-          retention-days: 1
+      # - name: Temporarily save Tar Files
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: db-artifact
+      #     path: cmd/main/downloadedfiles/downloadedfiles.tar
+      #     retention-days: 1
 
-      - name: Retrieve saved Tar
-        uses: actions/download-artifact@v2
-        with:
-          name: db-artifact
-          path: cmd/main/downloadedfiles/downloadedfiles.tar
-      - run:   |
-          tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar -C ipfiles
+      # - name: Retrieve saved Tar
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: db-artifact
+      #     path: cmd/main/downloadedfiles/downloadedfiles.tar
+      # - run:   |
+      #     tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar -C ipfiles
 
       - name: Upload latest version cloudIPtoDB
         run: |
+          tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar -C ipfiles
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "david@davidstclair.co.uk"
           git add ipfiles
