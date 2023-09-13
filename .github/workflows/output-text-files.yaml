@@ -22,7 +22,7 @@ jobs:
           chmod +x cloudIPtoDB
           ./cloudIPtoDB
           cd downloadedfiles
-          tar downloadfiles "*.ip.txt"
+          tar -cvf downloadfiles.tar "*.ip.txt"
 
       - name: Temporarily save Files
         uses: actions/upload-artifact@v2
