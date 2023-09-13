@@ -23,7 +23,7 @@ jobs:
           cd downloadedfiles
           tar -cvf downloadedfiles.tar *.ip.txt
 
-      - name: Upload latest version cloudIPtoDB
+      - name: Commit downloaded files to the repo
         run: |
           tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar
           ls -lasi
