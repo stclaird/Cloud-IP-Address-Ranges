@@ -24,6 +24,7 @@ jobs:
           cd downloadedfiles
           ls -lasi
           tar -cvf downloadfiles.tar *.ip.txt
+          ls -lasi
 
       - name: Temporarily save Tar Files
         uses: actions/upload-artifact@v2
