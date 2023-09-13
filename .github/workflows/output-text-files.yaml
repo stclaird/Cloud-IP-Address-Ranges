@@ -1,0 +1,52 @@
+name: Output IP Cidr Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout CloudIP
+        uses: actions/checkout@v3
+        with:
+          repository: stclaird/cloudIPtoDB
+
+      - name: Create and Tar Cidr Files
+        run: |-
+          ls -lasi
+          cd cmd/main/
+          go build -o cloudIPtoDB -v
+          chmod +x cloudIPtoDB
+          ./cloudIPtoDB
+          cd downloadedfiles
+          tar ../downloadfiles.tar *.ip.txt
+
+      - name: Temporarily save Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: db-artifact
+          path: cmd/main/downloadedfiles.tar
+          retention-days: 1
+
+      - name: Retrieve saved SQLite db
+        uses: actions/download-artifact@v2
+        with:
+          name: db-artifact
+          path: downloadedfiles.tar
+      - run:   |
+          tar -xvf downloadedfiles.tar ipfiles
+
+      - name: Upload latest version cloudIPtoDB
+        run: |
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "david@davidstclair.co.uk"
+          git add ipfiles
+          git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLASSIC_PAT_TOKEN }}
+          CI_COMMIT_MESSAGE: Continuous Integration Build Artifacts
+          CI_COMMIT_AUTHOR: Continuous Integration
