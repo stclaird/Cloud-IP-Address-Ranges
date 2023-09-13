@@ -25,7 +25,8 @@ jobs:
 
       - name: Commit downloaded files to the repo
         run: |
-          tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar
+          mkdir ipfiles
+          tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar -C ipfiles
           ls -lasi
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "david@davidstclair.co.uk"
