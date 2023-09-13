@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: db-artifact
-          path: cmd/main/downloadedfiles.tar
+          path: cmd/main/downloadedfiles/downloadedfiles.tar
           retention-days: 1
 
       - name: Retrieve saved Tar
