@@ -22,6 +22,7 @@ jobs:
           ./cloudIPtoDB
           ls -lasi
           cd downloadedfiles
+          ls -lasi
           tar -cvf downloadfiles.tar "*.ip.txt"
 
       - name: Temporarily save Files
