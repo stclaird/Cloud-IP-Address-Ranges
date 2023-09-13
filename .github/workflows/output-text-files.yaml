@@ -25,20 +25,20 @@ jobs:
           ls -lasi
           tar -cvf downloadfiles.tar *.ip.txt
 
-      - name: Temporarily save Files
+      - name: Temporarily save Tar Files
         uses: actions/upload-artifact@v2
         with:
           name: db-artifact
           path: cmd/main/downloadedfiles.tar
           retention-days: 1
 
-      - name: Retrieve saved SQLite db
+      - name: Retrieve saved Tar
         uses: actions/download-artifact@v2
         with:
           name: db-artifact
-          path: downloadedfiles.tar
+          path: cmd/main/downloadedfiles.tar
       - run:   |
-          tar -xvf downloadedfiles.tar ipfiles
+          tar -xvf downloadedfiles.tar ../../ipfiles
 
       - name: Upload latest version cloudIPtoDB
         run: |
