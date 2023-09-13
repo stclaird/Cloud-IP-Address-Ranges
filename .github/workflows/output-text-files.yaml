@@ -37,9 +37,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: db-artifact
-          path: cmd/main/downloadedfiles.tar
+          path: cmd/main/downloadedfiles/downloadedfiles.tar
       - run:   |
-          tar -xvf downloadedfiles.tar ../../ipfiles
+          tar -xvf cmd/main/downloadedfiles/downloadedfiles.tar -C ipfiles
 
       - name: Upload latest version cloudIPtoDB
         run: |
