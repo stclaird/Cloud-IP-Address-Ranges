@@ -26,7 +26,7 @@ The IP/Cidr  info is extracted from offical APIs and pages published by the prov
 I believe that extracing IP Cidr info from ASN could be less accurate as some organisations use ASNs from a parent company which they may share with more than one seperate entity/organisation. 
 For example, the ASN AS20473 that advertises IP Cidr prefixes for Vultr hosting  is actually registered "The Constant Company, LLC" and is shared by other orgs that seem distinct from Vultr. So I have left Vultr and other hosts with ASNs like this out for now.
 
-In the case of AWS, Vercel and Heroku - Vercel and Heroku are hosted by AWS. So the processing the provided AWS IP list should be enough, or so you might think. However, there are additional prefixes advertised in ASNs that Vercel and Heroku use that are not on the main AWS list.  
+In the case of AWS, Vercel and Heroku - Vercel and Heroku are hosted by AWS. So processing the provided [AWS IP list](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/aws-ips.ip.txt) should be enough, or so you might think. However, there are additional prefixes advertised in ASNs that Vercel and Heroku use that are not on the main AWS list.  
 
 # Technology Stack
 
@@ -119,9 +119,9 @@ sqlite>
 
 The records in the database are in CIDR network format, and not unpacked and stored as individual IP addresses.
 Unpacking the CIDRs into a individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
-However, the downside of not having individual IP addresses stored as seperate records is it does make querying for IPs using SQL difficult.
+However, the downside of not having individual IP addresses stored as seperate records is it does make querying for specific IPs using SQL difficult.
 
-To remedy this and allow for the querying of individual IP addresses we also store some additonal columns along side the CIDR record, the start (network) and end (broadcast) address. These records are both stored as integers and this means we are able to query whether a specific IP address record exists in the database by testing if the IP address falls between the start record and the end record.
+To remedy this and allow for the querying of individual IP addresses, we also store some additonal columns along side the CIDR record, the start (network) and end (broadcast) address. These records are both stored as integers and this means we are able to query whether a specific IP address record exists in the database by testing if the IP address falls between the start record and the end record.
 
 One thing though, for this to work you do need to convert your IP address to an integer before running a query.
 For example, if you want to know if the IP address `177.71.207.129` is within one of the CIDR records stored in the database:
