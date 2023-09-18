@@ -74,3 +74,7 @@ ipfiles:
   - cloudplatform: "alibaba"
     url: https://api.hackertarget.com/aslookup/?q=AS45102
     downloadfilename: alibaba-AS45102.ip.txt
+
+  - cloudplatform: "tencent"
+    url: https://api.hackertarget.com/aslookup/?q=AS45090
+    downloadfilename: tencent-AS45090.ip.txt
