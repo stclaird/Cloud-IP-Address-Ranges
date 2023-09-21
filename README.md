@@ -115,7 +115,7 @@ cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
 sqlite>
 ```
 
-3. Find if a specific IP address exists in one of the cidrs held in the database.
+### 4. Find if a specific IP address exists in one of the cidrs held in the database.
 
 The records in the database are in CIDR network format, and not unpacked and stored as individual IP addresses.
 Unpacking the CIDRs into a individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
