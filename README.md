@@ -34,7 +34,7 @@ The two core elements of this project are:
  - A binary written in GoLang which creates a SQLite database object and populates it with IP CIDR data from various Cloud platform providers.
  - A SQLite database file output containing the Cloud platform provider's CIDR information.
 
-The SQLite database schema is made up of a single 'net' table
+The SQLite database schema is made up of a single 'net' table.  
 
 ```CREATE TABLE IF NOT EXISTS net (
  	net_id INTEGER PRIMARY KEY,
@@ -105,7 +105,7 @@ select count(*) from net;
 select count(*) from net where cloudplatform='aws';
 ```
 
-### Get the CIDR records from cloudflare
+### 3. To get the CIDR records from cloudflare
 ```
 cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
 ```
