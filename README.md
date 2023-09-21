@@ -83,7 +83,7 @@ chmod +x cloudiptodb
 ./cloudiptodb
 ```
 
-This will produce a database file in the directory output
+This will produce a database file in the directory /output
 You can run this simply with the following command
 
 ```
