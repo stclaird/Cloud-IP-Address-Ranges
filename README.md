@@ -21,7 +21,7 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 | [Tencent](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/tencent-AS45090.ip.txt)					| from ASN Prefix				|
 
 ## NOTES:
-- The IP/Cidr  info is extracted from offical APIs and pages published by the providers themselves. Except when it isn't, as not all providers publish this information publicly - and when it isn't published, it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
+- The IP/Cidr  info is extracted from official APIs and pages published by the providers themselves. Except when it isn't, as not all providers publish this information publicly - and when it isn't published, it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
 
 - I believe that extracing IP Cidr info from ASN could be less accurate as some organisations use ASNs from a parent company which they may share with more than one seperate entity/organisation. 
 For example, the ASN AS20473 that advertises IP Cidr prefixes for Vultr hosting  is actually registered "The Constant Company, LLC" and is shared by other orgs that seem distinct from Vultr. So I have left Vultr and other hosts with ASNs like this out for now.
