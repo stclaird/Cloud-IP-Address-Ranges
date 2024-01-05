@@ -1,6 +1,6 @@
 {
-  "syncToken": "1702001083804",
-  "creationTime": "2023-12-07T18:04:43.804296",
+  "syncToken": "1704441881090",
+  "creationTime": "2024-01-05T00:04:41.090826",
   "prefixes": [{
     "ipv4Prefix": "8.8.4.0/24"
   }, {
