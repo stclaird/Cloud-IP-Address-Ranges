@@ -112,6 +112,7 @@ func main() {
 			}
 		}
 		report = append(report, entry)
+		ipfile.WriteFile(downloadto, cidrs) //overwrite downloaded file with IP addresse info only
 	}
 
 	printReport(report)

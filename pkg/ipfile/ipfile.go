@@ -57,6 +57,22 @@ func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 	return nil
 }
 
+func WriteFile(DownloadFileName string, cidrs []string ) {
+	f, err := os.Create(DownloadFileName)
+    if err != nil {
+        log.Fatal(err)
+    }
+    // remember to close the file
+    defer f.Close()
+
+    for _, cidr := range cidrs {
+        _, err := f.WriteString(cidr + "\n")
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+}
+
 type IpfileJson struct {
 	SyncToken    string `json:"syncToken"`
 	CreationTime string `json:"creationTime"`
