@@ -107,7 +107,7 @@ select count(*) from net where cloudplatform='aws';
 
 ### 3. To get the CIDR records from cloudflare
 ```
-cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
+select * from net where cloudplatform='cloudflare';
 ```
 ```
 1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
