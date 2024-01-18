@@ -66,11 +66,11 @@ Use this version to build the binary and create the sqllite database file with t
 
 Check out this repository
 ```
-git clone git@github.com:piuniverse/cloudIPtoDB.git
+git clone https://github.com/stclaird/Cloud-IP-Address-Ranges)
 ```
 Change directory to the cmd folder
 ```
-cd cloudIPtoDB/cmd/main
+cd Cloud-IP-Address-Ranges/cmd/main
 ```
 Build the binary
 ```
