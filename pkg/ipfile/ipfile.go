@@ -201,7 +201,7 @@ func ResolveAzureDownloadUrl() string {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s", resp.StatusCode, resp.Status)
+		log.Printf("status code error: %d %s\n", resp.StatusCode, resp.Status)
 	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
