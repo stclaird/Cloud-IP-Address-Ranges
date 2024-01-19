@@ -54,13 +54,13 @@ func init() {
 
 func main() {
 
-	var report []reportEntry //initiate a report struct to keep track of imports
+	var report []reportEntry //create a report struct to keep track of imports
 
 	for _, i := range confObj.Ipfiles {
 
 		var cidrs []string
 
-		var entry = reportEntry{
+		var entry = reportEntry{ //init report struct entry for each cloud provider
 			CloudPlatform: i.Cloudplatform,
 			Success:       0,
 			Failed:        0,
@@ -68,16 +68,17 @@ func main() {
 
 		downloadto := fmt.Sprintf("%s/%s", confObj.Downloaddir, i.DownloadFileName)
 
-		fmt.Println(downloadto)
-		fmt.Println("downloaddir", confObj.Downloaddir)
-
 		var url string
 		url = i.Url
-		fmt.Println(url)
 
+		var err error
 		switch i.Cloudplatform {
 		case "azure":
-			url = ipfile.ResolveAzureDownloadUrl() //azure download file changes so we need to figure out what the latest path is
+			url, err = ipfile.ResolveAzureDownloadUrl() //azure download file changes so we need to figure out what the latest path is
+		}
+
+		if err != nil {
+			break
 		}
 
 		var FileObj ipfile.IpfileTXT
@@ -112,9 +113,8 @@ func main() {
 			}
 		}
 		report = append(report, entry)
-		ipfile.WriteFile(downloadto, cidrs) //overwrite downloaded file with IP addresse info only
+		ipfile.WriteFile(downloadto, cidrs) //overwrite downloaded file with IP address info only
 	}
 
 	printReport(report)
-
 }

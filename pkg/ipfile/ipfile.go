@@ -2,11 +2,11 @@ package ipfile
 
 import (
 	"bufio"
+	"crypto/tls"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +14,8 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+
+	"golang.org/x/net/http2"
 )
 
 var Downloaddir string
@@ -25,6 +27,13 @@ type DownloadFile struct {
 }
 
 type Common struct {
+}
+
+func checkResponse( StatusCode int) bool{
+	if StatusCode >= 200 && StatusCode < 300 {
+		return true
+	}
+	return false
 }
 
 func (i *Common) Download(DownloadFileName string, Url string) (err error) {
@@ -40,13 +49,15 @@ func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 
 	resp, err := http.Get(Url)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+		fmt.Fprintf(os.Stderr, "fetch error: %v\n", err)
+		return err
 	}
 	defer resp.Body.Close()
 
-	// Check server response
-	if resp.StatusCode != http.StatusOK {
-		fmt.Println(fmt.Errorf("bad status: %s", resp.Status))
+	//Check server response
+	if !checkResponse(resp.StatusCode) {
+		err = fmt.Errorf("bad respose status: %v", resp.StatusCode)
+		return err
 	}
 
 	// Write the body to file
@@ -118,7 +129,7 @@ func AsJson[T any](DownloadFileName string) (fileOut T) {
 		log.Println("Error", err)
 	}
 	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := io.ReadAll(jsonFile)
 	json.Unmarshal(byteValue, &fileOut)
 
 	return fileOut
@@ -188,12 +199,25 @@ func Process(cidrs_in []string) (cidrs_out []string) {
 	return cidrs_out
 }
 
-func ResolveAzureDownloadUrl() string {
+func ResolveAzureDownloadUrl() (string, error) {
 	//Extract the dynamic download URL from the service tag published page
+	var link string
 
 	downloadPage := "https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519"
-	resp, err := http.Get(downloadPage)
 
+	tlsTransport := &http2.Transport{
+        TLSClientConfig: &tls.Config{
+            MaxVersion: tls.VersionTLS12,
+        },
+    }
+
+	client := http.Client{Transport: tlsTransport}
+	req , err := http.NewRequest("GET", downloadPage, nil)
+	if err != nil {
+		return link, err
+	}
+
+	resp , err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -201,17 +225,18 @@ func ResolveAzureDownloadUrl() string {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		log.Printf("status code error: %d %s\n", resp.StatusCode, resp.Status)
+		log.Printf("Azure status code error: %d %s\n", resp.StatusCode, resp.Status)
 	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 
 	if err != nil {
 		log.Fatal(err)
+		return "error", err
 	}
 
 	item := doc.Find(".mscom-link.failoverLink").First()
-	link, _ := item.Attr("href")
+	link, _ = item.Attr("href")
 
-	return link
+	return link, nil
 }
