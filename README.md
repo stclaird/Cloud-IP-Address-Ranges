@@ -117,7 +117,7 @@ sqlite>
 
 ### 4. Find if a specific IP address exists in one of the cidrs held in the database.
 
-The records in the database are in CIDR network format, and not unpacked and stored as individual IP addresses.
+The records in the database are in CIDR network format, and not unpacked and stored as individual IPv4 addresses.
 Unpacking the CIDRs into a individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
 However, the downside of not having individual IP addresses stored as seperate records is it does make querying for specific IPs using SQL difficult.
 
