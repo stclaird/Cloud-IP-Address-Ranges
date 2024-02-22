@@ -53,7 +53,7 @@ These instructions describe how to use the sqlite file on your workstation for l
 ## Method 1
 The easiest method, ensure you have [SQLite](https://www.sqlite.org/download.html) installed and then simply download the latest cloudIP.sqlite3.db file from the releases section.
 
-https://github.com/piuniverse/cloudIPtoDB/releases/latest
+[https://github.com/piuniverse/cloudIPtoDB/releases/latest](https://github.com/stclaird/Cloud-IP-Address-Ranges/releases/latest)
 
 Then from the command prompt run the sqlite command and specify the newly download file path.
 
