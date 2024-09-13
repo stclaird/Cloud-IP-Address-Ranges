@@ -12,7 +12,7 @@ jobs:
       - name: Checkout CloudIP
         uses: actions/checkout@v3
         with:
-          repository: stclaird/cloudIPtoDB
+          repository: stclaird/Cloud-IP-Address-Ranges
 
       - name: Create and Tar Cidr Files
         run: |-
@@ -22,6 +22,7 @@ jobs:
           ./cloudIPtoDB
           cd downloadedfiles
           tar -cvf downloadedfiles.tar *.ip.txt
+          rm cloudIPtoDB
 
       - name: Commit downloaded files to the repo
         run: |
