@@ -7,11 +7,11 @@ import (
 	"log"
 	"os"
 
-	"github/stclaird/cloudIPtoDB/pkg/config"
-	"github/stclaird/cloudIPtoDB/pkg/ipfile"
-	"github/stclaird/cloudIPtoDB/pkg/ipnet"
-	"github/stclaird/cloudIPtoDB/pkg/model"
-	"github/stclaird/cloudIPtoDB/pkg/repository"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/config"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/ipfile"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/ipnet"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/model"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/repository"
 
 	_ "github.com/mattn/go-sqlite3"
 )

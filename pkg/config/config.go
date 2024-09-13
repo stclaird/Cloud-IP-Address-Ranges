@@ -3,7 +3,7 @@ package config
 import (
 	"log"
 
-	"github/stclaird/cloudIPtoDB/pkg/ipfile"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/ipfile"
 
 	"github.com/spf13/viper"
 )

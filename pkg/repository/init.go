@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	model "github.com/stclaird/Cloud-IP-Address-Ranges/model"
+	model "github.com/stclaird/Cloud-IP-Address-Ranges/pkg/model"
 )
 
 type CidrRepo struct {
