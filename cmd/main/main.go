@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -9,7 +10,8 @@ import (
 	"github/stclaird/cloudIPtoDB/pkg/config"
 	"github/stclaird/cloudIPtoDB/pkg/ipfile"
 	"github/stclaird/cloudIPtoDB/pkg/ipnet"
-	"github/stclaird/cloudIPtoDB/pkg/models"
+	"github/stclaird/cloudIPtoDB/pkg/model"
+	"github/stclaird/cloudIPtoDB/pkg/repository"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -43,16 +45,22 @@ func init() {
 
 	file.Close()
 
-	models.DB, _ = sql.Open("sqlite3", full_path)
+	db, err = sql.Open("sqlite3", full_path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	models.SetupDB(models.DB)
-	db = models.DB
 }
 
 func main() {
+
+	ctx := context.Background()
+
+	defer db.Close()
+	model.SetupDB(db)
+
+	cidrRepo := repository.NewCidrRepository(db)
+
 
 	var report []reportEntry //create a report struct to keep track of imports
 
@@ -93,7 +101,7 @@ func main() {
 			}
 
 			if processedCidr.Iptype == "IPv4" {
-				c := models.CidrObject{
+				c := model.Cidr{
 					Net:           cidr,
 					Start_ip:      processedCidr.NetIPDecimal,
 					End_ip:        processedCidr.BcastIPDecimal,
@@ -102,7 +110,7 @@ func main() {
 					Iptype:        processedCidr.Iptype,
 				}
 
-				err := models.AddCidr(db, c)
+				err := cidrRepo.Insert(ctx,c)
 
 				if err != nil {
 					entry.IncrementFailed()
