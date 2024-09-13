@@ -27,6 +27,7 @@ cmd/main/ipfiles/*.json
 cmd/main/ipfiles/
 cmd/main/output
 cmd/main/downloadedfiles
+cmd/main/db-output
 
 ._.DS_Store
 .DS_Store

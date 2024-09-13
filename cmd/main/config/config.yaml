@@ -1,6 +1,6 @@
-downloaddir: "downloadedfiles/"
+downloaddir: "downloadedfiles"
 dbfile : cloudIP.sqlite3.db
-dbdir  : "output/"
+dbdir  : "db-output"
 
 ipfiles:
   - cloudplatform: "softlayer/ibm"

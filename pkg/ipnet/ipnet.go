@@ -9,16 +9,6 @@ import (
 	"gopkg.in/netaddr.v1"
 )
 
-// type Repository interface {
-// 	GetCidr(ctx context.Context, net time.Time) (*Hour, error)
-// 	AddCidr(
-// 	   ctx context.Context,
-// 	   hourTime time.Time,
-// 	   updateFn func(h *Hour) (*Hour, error),
-// 	) error
-//  }
-
-
 type cidrObject struct {
 	CidrDecimal    int
 	NetIP          net.IP
