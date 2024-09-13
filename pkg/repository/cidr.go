@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	model "github.com/stclaird/Cloud-IP-Address-Ranges/model"
+	model "github.com/stclaird/Cloud-IP-Address-Ranges/pkg/model"
 )
 
 func (repo *CidrRepo) Insert(ctx context.Context, newCidr model.Cidr) error {
