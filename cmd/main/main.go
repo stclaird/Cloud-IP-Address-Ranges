@@ -62,7 +62,7 @@ func main() {
 	cidrRepo := repository.NewCidrRepository(db)
 
 
-	var report []reportEntry //create a report struct to keep track of imports
+	var report []reportEntry //create a report struct to keep track of inserts
 
 	for _, i := range confObj.Ipfiles {
 
@@ -111,7 +111,7 @@ func main() {
 				}
 
 				err := cidrRepo.Insert(ctx,c)
-
+				//record inserts
 				if err != nil {
 					entry.IncrementFailed()
 				} else {
