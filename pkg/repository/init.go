@@ -19,4 +19,5 @@ func NewCidrRepository(db *sql.DB) CidrRepository {
 
 type CidrRepository interface {
 	Insert(ctx context.Context, cidr model.Cidr) error
+	FindByNet(ctx context.Context, net string) ( error, bool)
 }

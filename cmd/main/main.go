@@ -109,15 +109,16 @@ func main() {
 					Cloudplatform: i.Cloudplatform,
 					Iptype:        processedCidr.Iptype,
 				}
-
-				err := cidrRepo.Insert(ctx,c)
-				//record inserts
-				if err != nil {
-					entry.IncrementFailed()
-				} else {
-					entry.IncrementSuccess()
+				_, exists := cidrRepo.FindByNet(ctx, c.Net)
+				if !exists {
+					err := cidrRepo.Insert(ctx,c)
+					//record inserts
+					if err != nil {
+						entry.IncrementFailed()
+					} else {
+						entry.IncrementSuccess()
+					}
 				}
-
 			}
 		}
 		report = append(report, entry)

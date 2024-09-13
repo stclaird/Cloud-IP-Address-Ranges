@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"log"
 
 	model "github.com/stclaird/Cloud-IP-Address-Ranges/pkg/model"
@@ -21,4 +22,23 @@ func (repo *CidrRepo) Insert(ctx context.Context, newCidr model.Cidr) error {
 
 	res.LastInsertId()
 	return err
+}
+
+func (repo *CidrRepo) FindByNet(ctx context.Context, net string ) (error,bool) {
+	stmt, err := repo.DB.Prepare("SELECT net FROM net where net=?" )
+	if err != nil {
+		log.Printf("Prepare Error")
+		return err, false
+	}
+
+	var fetchedCidr model.Cidr
+
+	err = stmt.QueryRow(net).Scan(&fetchedCidr.Net)
+    if err != nil {
+        if err == sql.ErrNoRows {
+			//Row not found
+			return err, false
+        }
+	}
+	return err, true
 }
