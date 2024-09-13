@@ -20,9 +20,10 @@ jobs:
           go build -o cloudIPtoDB -v
           chmod +x cloudIPtoDB
           ./cloudIPtoDB
+          rm cloudIPtoDB
           cd downloadedfiles
           tar -cvf downloadedfiles.tar *.ip.txt
-          rm cloudIPtoDB
+
 
       - name: Commit downloaded files to the repo
         run: |
