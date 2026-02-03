@@ -25,14 +25,14 @@ jobs:
           ./cloudIPtoDB
 
       - name: Temporarily save SQLite db
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: db-artifact
           path: cmd/main/output/cloudIP.sqlite3.db
           retention-days: 1
       
       - name: Retrieve saved SQLite db
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: db-artifact
           path: cmd/api/cloudIP.sqlite3.db
