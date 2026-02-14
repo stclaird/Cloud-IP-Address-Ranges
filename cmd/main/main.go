@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"flag"
 	"log"
 	"os"
 
@@ -53,6 +54,8 @@ func init() {
 }
 
 func main() {
+	debugDownload := flag.Bool("debug", false, "enable debug logging for IP file downloads")
+	flag.Parse()
 
 	ctx := context.Background()
 
@@ -82,14 +85,18 @@ func main() {
 		var err error
 		switch i.Cloudplatform {
 		case "azure":
-			url, err = ipfile.ResolveAzureDownloadUrl() //azure download file changes so we need to figure out what the latest path is
+			url, err = ipfile.ResolveAzureDownloadUrl(*debugDownload) //azure download file changes so we need to figure out what the latest path is
 		}
 
 		if err != nil {
 			break
 		}
 
-		var FileObj ipfile.IpfileTXT
+		FileObj := ipfile.IpfileTXT{
+			Common: ipfile.Common{
+				Debug: *debugDownload,
+			},
+		}
 		FileObj.Download(downloadto, url)
 		cidrs_raw := ipfile.AsText[ipfile.IpfileTXT](downloadto)
 		cidrs = ipfile.Process(cidrs_raw)

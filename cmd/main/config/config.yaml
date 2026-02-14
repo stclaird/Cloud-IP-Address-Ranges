@@ -11,9 +11,9 @@ ipfiles:
     url: https://api.github.com/meta
     downloadfilename: github.ip.txt
 
-  - cloudplatform: ibm
-    url: "https://raw.githubusercontent.com/ibm-cloud-docs/hardware-firewall-shared/master/ips.md"
-    downloadfilename: ibm.ip.txt
+  # - cloudplatform: ibm
+  #   url: "https://raw.githubusercontent.com/ibm-cloud-docs/hardware-firewall-shared/master/ips.md"
+  #   downloadfilename: ibm.ip.txt
 
   - cloudplatform: azure
     url: "https://www.microsoft.com/en-us/download/details.aspx?id=56519"

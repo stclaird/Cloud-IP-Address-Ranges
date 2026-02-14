@@ -83,6 +83,11 @@ chmod +x cloudiptodb
 ./cloudiptodb
 ```
 
+To enable download debug logging (HTTP status, size, timing), run:
+```
+./cloudiptodb -debug
+```
+
 This will produce a database file in the directory /output
 You can run this simply with the following command
 

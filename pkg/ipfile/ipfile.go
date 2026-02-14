@@ -1,6 +1,7 @@
 package ipfile
 
 import (
+	"bytes"
 	"bufio"
 	"crypto/tls"
 	"encoding/csv"
@@ -12,6 +13,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 
@@ -27,6 +29,22 @@ type DownloadFile struct {
 }
 
 type Common struct {
+	Debug bool
+}
+
+type azureCandidateCollector struct {
+	candidates *[]string
+}
+
+func (c azureCandidateCollector) Collect(_ int, s *goquery.Selection) {
+	href, ok := s.Attr("href")
+	if !ok || href == "" {
+		return
+	}
+	lower := strings.ToLower(href)
+	if strings.Contains(lower, "download.microsoft.com") && (strings.HasSuffix(lower, ".json") || strings.HasSuffix(lower, ".zip")) {
+		*c.candidates = append(*c.candidates, href)
+	}
 }
 
 func checkResponse( StatusCode int) bool{
@@ -39,6 +57,10 @@ func checkResponse( StatusCode int) bool{
 func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 	//function to download the cloud ip
 	log.Printf("Downloading %s to %s", Url, DownloadFileName)
+	start := time.Now()
+	if i != nil && i.Debug {
+		log.Printf("Download debug enabled")
+	}
 	//Download the IP Address file``
 	// Create the file
 	fileOut, err := os.Create(DownloadFileName)
@@ -54,6 +76,13 @@ func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 	}
 	defer resp.Body.Close()
 
+	if i != nil && i.Debug {
+		log.Printf("Response status: %s", resp.Status)
+		if resp.ContentLength >= 0 {
+			log.Printf("Content length: %d", resp.ContentLength)
+		}
+	}
+
 	//Check server response
 	if !checkResponse(resp.StatusCode) {
 		err = fmt.Errorf("bad respose status: %v", resp.StatusCode)
@@ -61,9 +90,13 @@ func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 	}
 
 	// Write the body to file
-	_, err = io.Copy(fileOut, resp.Body)
+	bytesWritten, err := io.Copy(fileOut, resp.Body)
 	if err != nil {
 		return err
+	}
+
+	if i != nil && i.Debug {
+		log.Printf("Wrote %d bytes in %s", bytesWritten, time.Since(start))
 	}
 	return nil
 }
@@ -199,11 +232,14 @@ func Process(cidrs_in []string) (cidrs_out []string) {
 	return cidrs_out
 }
 
-func ResolveAzureDownloadUrl() (string, error) {
+func ResolveAzureDownloadUrl(debug bool) (string, error) {
 	//Extract the dynamic download URL from the service tag published page
 	var link string
 
 	downloadPage := "https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519"
+	if debug {
+		log.Printf("Azure download page: %s", downloadPage)
+	}
 
 	tlsTransport := &http2.Transport{
         TLSClientConfig: &tls.Config{
@@ -226,17 +262,51 @@ func ResolveAzureDownloadUrl() (string, error) {
 
 	if resp.StatusCode != 200 {
 		log.Printf("Azure status code error: %d %s\n", resp.StatusCode, resp.Status)
+	} else if debug {
+		log.Printf("Azure status: %s", resp.Status)
 	}
 
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(bodyBytes))
 
 	if err != nil {
 		log.Fatal(err)
 		return "error", err
 	}
 
-	item := doc.Find(".mscom-link.failoverLink").First()
-	link, _ = item.Attr("href")
+	var candidates []string
+	collector := azureCandidateCollector{candidates: &candidates}
+	doc.Find("a").Each(collector.Collect)
+
+	if debug {
+		log.Printf("Azure download candidates: %d", len(candidates))
+	}
+
+	if len(candidates) > 0 {
+		link = candidates[0]
+	} else {
+		re := regexp.MustCompile(`https?://download\.microsoft\.com/[^"'\s]+\.(json|zip)`)
+		matches := re.FindAllString(string(bodyBytes), -1)
+		if debug {
+			log.Printf("Azure regex candidates: %d", len(matches))
+		}
+		if len(matches) > 0 {
+			link = matches[0]
+		}
+	}
+
+	if debug {
+		if link == "" {
+			log.Printf("Azure download link not found")
+		} else {
+			log.Printf("Azure download link: %s", link)
+		}
+	}
 
 	return link, nil
 }
+
