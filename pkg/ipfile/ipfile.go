@@ -133,16 +133,46 @@ func IPtoCidr(str_in string)(string) {
 
 	if contains {
 		return str_in
-	} else {
-		return fmt.Sprintf("%s/32", str_in)
 	}
+	
+	// Detect IP type and add appropriate suffix
+	if strings.Contains(str_in, ":") {
+		// IPv6 address
+		return fmt.Sprintf("%s/128", str_in)
+	}
+	
+	// IPv4 address
+	return fmt.Sprintf("%s/32", str_in)
 }
 
 func MatchIp(pattern string) []string {
 	//match ip addresses from string pattern and return slice of ips as string
-	re := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
-	result := re.FindAllString(pattern, -1)
-
+	// Match IPv4 addresses
+	reIPv4 := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
+	resultIPv4 := reIPv4.FindAllString(pattern, -1)
+	
+	// Match IPv6 addresses - look for patterns with multiple colons and hex characters
+	// Pattern: hex chars and colons, must have at least 2 colons, optional CIDR suffix
+	reIPv6 := regexp.MustCompile(`(?i)[0-9a-f]*:[0-9a-f:]+(?:/\d{1,3}|)`)
+	candidatesIPv6 := reIPv6.FindAllString(pattern, -1)
+	
+	// Filter to only include valid IPv6-like patterns
+	// Must contain at least one hex letter (a-f) OR contain :: (compressed notation)
+	// Must have at least 2 colons
+	var resultIPv6 []string
+	for _, candidate := range candidatesIPv6 {
+		colonCount := strings.Count(candidate, ":")
+		hasHexLetter := regexp.MustCompile(`(?i)[a-f]`).MatchString(candidate)
+		hasDoubleColon := strings.Contains(candidate, "::")
+		
+		// Valid if it has :: OR (has hex letters AND multiple colons)
+		if hasDoubleColon || (hasHexLetter && colonCount >= 2) {
+			resultIPv6 = append(resultIPv6, candidate)
+		}
+	}
+	
+	// Combine results
+	result := append(resultIPv4, resultIPv6...)
 	return result
 }
 
