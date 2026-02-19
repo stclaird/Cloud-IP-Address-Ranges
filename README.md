@@ -10,7 +10,6 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 | [CloudFlare](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/cloudflare-ipv4.ip.txt)				| downloaded from provider url |
 |[ Oracle Cloud	](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/oracle-public.ip.txt)			| downloaded from provider url |
 | [Linode](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/linode.ip.txt)     				| downloaded from provider url |
-| [IBM](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/ibm.ip.txt)						| downloaded from provider github page |
 | [IBM/Softlayer	](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/softlayer-ibm.ip.txt)			| from ASN Prefix				|
 | [GoDaddy](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/godaddy-AS26496.ip.txt)					| from ASN Prefix				|
 | [A2Hosting](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/a2hosting.ip.txt)					| from ASN Prefix				|
@@ -21,10 +20,8 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 | [Tencent](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/tencent-AS45090.ip.txt)					| from ASN Prefix				|
 
 ## NOTES:
-- The IP/CIDR  info is extracted from official APIs and pages published by the providers themselves. Except when it isn't, as not all providers publish this information publicly - and when it isn't published, it is inferred and extracted from ASN prefix information. _Currently using the ASN info provided by the splendid folks at [hackertarget](https://hackertarget.com/)._ 
-
+- The IP/CIDR  info is extracted from official APIs and pages published by the providers themselves. Except when it isn't, as not all providers publish this information publicly - and when it isn't published, it is inferred and extracted from ASN prefix information. 
 - I believe that extracing IP Cidr info from ASN to be less accurate, as some organisations use ASNs from a parent company which they may share with more than one seperate entity/organisation. 
-For example, the ASN AS20473 that advertises IP Cidr prefixes for Vultr hosting  is actually registered "The Constant Company, LLC" and is shared by other orgs that seem distinct from Vultr. So I have left Vultr and other hosts with ASNs like this out for now.
 
 - In the case of AWS, Vercel and Heroku - Vercel and Heroku are hosted by AWS. So processing the provided [AWS IP list](https://github.com/stclaird/cloudIPtoDB/blob/main/ipfiles/aws-ips.ip.txt) should be enough, or so you might think. However, there are additional prefixes advertised in ASNs that Vercel and Heroku use that are not on the main AWS list.  
 
