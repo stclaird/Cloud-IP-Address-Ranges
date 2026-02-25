@@ -76,11 +76,3 @@ func IPv4toDecimal(ipIn net.IP) (decimalOut int64) {
 	}
 	return decimalOut
 }
-
-// IPtoString converts both IPv4 and IPv6 addresses to their string representation
-func IPtoString(ipIn net.IP) string {
-	if ipIn == nil {
-		return ""
-	}
-	return ipIn.String()
-}
