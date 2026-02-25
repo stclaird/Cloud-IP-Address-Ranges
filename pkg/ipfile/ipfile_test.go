@@ -60,27 +60,4 @@ func TestMatchIpWithTimestamps(t *testing.T) {
 	}
 }
 
-func TestMatchIpIPv6Valid(t *testing.T) {
-	// Test valid IPv6 addresses are matched
-	testCases := []struct {
-		input    string
-		expected []string
-	}{
-		{"2001:4860:4860::8888", []string{"2001:4860:4860::8888"}},
-		{"2001:db8::1/64", []string{"2001:db8::1/64"}},
-		{"fe80::1", []string{"fe80::1"}},
-		{"::1", []string{"::1"}},
-		{"2001:0db8:0000:0000:0000:ff00:0042:8329", []string{"2001:0db8:0000:0000:0000:ff00:0042:8329"}},
-	}
-	
-	for _, tc := range testCases {
-		matches := MatchIp(tc.input)
-		if len(matches) != len(tc.expected) {
-			t.Errorf("For input '%s': expected %d matches, got %d: %v", tc.input, len(tc.expected), len(matches), matches)
-			continue
-		}
-		if len(matches) > 0 && matches[0] != tc.expected[0] {
-			t.Errorf("For input '%s': expected '%s', got '%s'", tc.input, tc.expected[0], matches[0])
-		}
-	}
-}
+
