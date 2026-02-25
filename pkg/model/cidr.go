@@ -7,8 +7,8 @@ import (
 
 type Cidr struct {
     Net string
-	Start_ip      int
-	End_ip        int
+	Start_ip      string
+	End_ip        string
 	Url           string
 	Cloudplatform string
 	Iptype        string
@@ -17,8 +17,8 @@ type Cidr struct {
 const createNetDB string = `
 CREATE TABLE IF NOT EXISTS net (
 	net TEXT PRIMARY KEY,
-	start_ip INT NOT NULL,
-	end_ip INT NOT NULL,
+	start_ip TEXT NOT NULL,
+	end_ip TEXT NOT NULL,
 	url TEXT NOT NULL,
 	cloudplatform TEXT NOT NULL,
 	iptype TEXT NOT NULL

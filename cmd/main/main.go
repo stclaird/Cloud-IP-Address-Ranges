@@ -105,26 +105,26 @@ func main() {
 			processedCidr, err := ipnet.PrepareCidrforDB(cidr)
 			if err != nil {
 				fmt.Println("Error: ", err)
+				continue
 			}
 
-			if processedCidr.Iptype == "IPv4" {
-				c := model.Cidr{
-					Net:           cidr,
-					Start_ip:      processedCidr.NetIPDecimal,
-					End_ip:        processedCidr.BcastIPDecimal,
-					Url:           i.Url,
-					Cloudplatform: i.Cloudplatform,
-					Iptype:        processedCidr.Iptype,
-				}
-				_, exists := cidrRepo.FindByNet(ctx, c.Net)
-				if !exists {
-					err := cidrRepo.Insert(ctx,c)
-					//record inserts
-					if err != nil {
-						entry.IncrementFailed()
-					} else {
-						entry.IncrementSuccess()
-					}
+			// Support both IPv4 and IPv6
+			c := model.Cidr{
+				Net:           cidr,
+				Start_ip:      processedCidr.NetIPString,
+				End_ip:        processedCidr.BcastIPString,
+				Url:           i.Url,
+				Cloudplatform: i.Cloudplatform,
+				Iptype:        processedCidr.Iptype,
+			}
+			_, exists := cidrRepo.FindByNet(ctx, c.Net)
+			if !exists {
+				err := cidrRepo.Insert(ctx,c)
+				//record inserts
+				if err != nil {
+					entry.IncrementFailed()
+				} else {
+					entry.IncrementSuccess()
 				}
 			}
 		}

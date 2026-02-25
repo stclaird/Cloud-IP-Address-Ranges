@@ -11,10 +11,6 @@ ipfiles:
     url: https://api.github.com/meta
     downloadfilename: github.ip.txt
 
-  # - cloudplatform: ibm
-  #   url: "https://raw.githubusercontent.com/ibm-cloud-docs/hardware-firewall-shared/master/ips.md"
-  #   downloadfilename: ibm.ip.txt
-
   - cloudplatform: azure
     url: "https://www.microsoft.com/en-us/download/details.aspx?id=56519"
     downloadfilename: "azure-public-cloud.ip.txt"
@@ -47,6 +43,10 @@ ipfiles:
     url: https://www.cloudflare.com/ips-v4
     downloadfilename: cloudflare-ipv4.ip.txt
 
+  - cloudplatform: cloudflare
+    url: https://www.cloudflare.com/ips-v6
+    downloadfilename: cloudflare-ipv6.ip.txt
+
   - cloudplatform: oracle
     url: https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json
     downloadfilename: oracle-public.ip.txt
@@ -76,5 +76,38 @@ ipfiles:
     downloadfilename: alibaba-AS45102.ip.txt
 
   - cloudplatform: "tencent"
-    url: https://api.hackertarget.com/aslookup/?q=AS45090
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS45090
     downloadfilename: tencent-AS45090.ip.txt
+
+  - cloudplatform: "ibmcloud"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS13335
+    downloadfilename: ibmcloud-AS13335.ip.txt
+
+  - cloudplatform: "scaleway"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS12876
+    downloadfilename: scaleway-AS12876.ip.txt
+  
+  - cloudplatform: "Hetzner"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS24940
+    downloadfilename: hetzner-AS24940.ip.txt
+
+  - cloudplatform: "Vultr"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS20473
+    downloadfilename: vultr-AS20473.ip.txt
+
+  - cloudplatform: "Vultr"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS20473
+    downloadfilename: vultr-AS20473.ip.txt
+
+  - cloudplatform: "GoDaddy"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS26496
+    downloadfilename: godaddy-AS26496.ip.txt
+
+  - cloudplatform: "GoDaddy"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS398101
+    downloadfilename: godaddy-AS30083.ip.txt
+
+  - cloudplatform: "gmo"
+    url: https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS7506
+    downloadfilename: gmo-AS7506.ip.txt
+

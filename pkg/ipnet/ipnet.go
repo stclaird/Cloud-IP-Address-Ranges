@@ -1,7 +1,6 @@
 package ipnet
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -15,6 +14,8 @@ type cidrObject struct {
 	BcastIP        net.IP
 	NetIPDecimal   int
 	BcastIPDecimal int
+	NetIPString    string
+	BcastIPString  string
 	Iptype         string
 }
 
@@ -29,16 +30,16 @@ func PrepareCidrforDB(cidrIn string) (cidrOut cidrObject, err error) {
 
 	cidrOut.BcastIP = netaddr.BroadcastAddr(ipnet)
 	cidrOut.NetIP = netaddr.NetworkAddr(ipnet)
-	cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
-	cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
-
 	cidrOut.Iptype = IpType(fmt.Sprintf("%q", cidrOut.NetIP))
-
-	//deal with IPv6 until it is supported
-	if cidrOut.Iptype == "IPv6" {
-		err := errors.New("IPv6 Not supported Yet")
-		log.Println("Error : ", cidrIn, err)
-		return cidrOut, err
+	
+	// Store string representations for both IPv4 and IPv6
+	cidrOut.NetIPString = IPtoString(cidrOut.NetIP)
+	cidrOut.BcastIPString = IPtoString(cidrOut.BcastIP)
+	
+	// For IPv4, also store decimal representation (for backward compatibility)
+	if cidrOut.Iptype == "IPv4" {
+		cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
+		cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
 	}
 
 	return cidrOut, nil
@@ -78,4 +79,12 @@ func IPv4toDecimal(ipIn net.IP) (decimalOut int) {
 		decimalOut = decimalOut + value
 	}
 	return decimalOut
+}
+
+// IPtoString converts both IPv4 and IPv6 addresses to their string representation
+func IPtoString(ipIn net.IP) string {
+	if ipIn == nil {
+		return ""
+	}
+	return ipIn.String()
 }
