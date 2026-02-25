@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: db-artifact
-          path: cmd/main/output/cloudIP.sqlite3.db
+          path: cmd/main/db-output/cloudIP.sqlite3.db
           retention-days: 1
       
       - name: Retrieve saved SQLite db
@@ -42,7 +42,7 @@ jobs:
 
       - name: Upload latest version cloudIPtoDB
         run: |
-          cd cmd/main/output
+          cd cmd/main/db-output
           TAG=$(gh release view --json name --jq .name)
           gh release upload ${TAG} cloudIP.sqlite3.db --clobber
         env:
