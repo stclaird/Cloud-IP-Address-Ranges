@@ -7,8 +7,8 @@ import (
 
 type Cidr struct {
     Net string
-	Start_ip      int
-	End_ip        int
+	Start_ip      int64
+	End_ip        int64
 	Url           string
 	Cloudplatform string
 	Iptype        string
