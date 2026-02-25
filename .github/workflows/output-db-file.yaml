@@ -36,14 +36,14 @@ jobs:
         with:
           name: db-artifact
           path: cmd/api/cloudIP.sqlite3.db
-      - run:   |
-          upload_url=$(curl -sL https://api.github.com/repos/actions/checkout/releases/latest | jq -r '.upload_url')
-          echo UPLOAD_URL=$upload_url >> $GITHUB_ENV
 
-      - name: Upload latest version cloudIPtoDB
+      - name: Create or Update Release
         run: |
           cd cmd/main/db-output
-          TAG=$(gh release view --json name --jq .name)
+          TAG="latest"
+          # Create release if it doesn't exist, otherwise it will just fail gracefully
+          gh release create ${TAG} --title "Latest Database" --notes "Latest CloudIP SQLite Database" || true
+          # Upload the database file
           gh release upload ${TAG} cloudIP.sqlite3.db --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.CLASSIC_PAT_TOKEN }}
