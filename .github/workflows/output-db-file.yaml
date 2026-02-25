@@ -46,4 +46,4 @@ jobs:
           # Upload the database file
           gh release upload ${TAG} cloudIP.sqlite3.db --clobber
         env:
-          GITHUB_TOKEN: ${{ secrets.CLASSIC_PAT_TOKEN }}
+          GH_TOKEN: ${{ secrets.CLASSIC_PAT_TOKEN }}
