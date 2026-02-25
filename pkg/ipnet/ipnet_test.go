@@ -37,7 +37,7 @@ func TestIPv4toDecimal(t *testing.T) {
 		log.Panicln("ParseCIDR Error:", err)
 	}
 	got := IPv4toDecimal(ip)
-	want := 1376559617
+	var want int64 = 1376559617
 
 	if want != got {
 		t.Errorf("Expected '%d', but got '%d'", want, got)

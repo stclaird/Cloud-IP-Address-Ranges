@@ -1,6 +1,7 @@
 downloaddir: "downloadedfiles"
-dbfile : cloudIP.sqlite3.db
+dbfile : cloudIP
 dbdir  : "db-output"
+dbtypes: ["sqlite", "duckdb"]  # Options: sqlite, duckdb, or both
 
 ipfiles:
   - cloudplatform: "softlayer/ibm"

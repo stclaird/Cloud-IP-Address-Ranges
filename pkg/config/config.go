@@ -13,6 +13,7 @@ type Config struct {
 	Dbdir       string                //The database output directory
 	Downloaddir string                //The directory where cloud IP files are downloaded to.
 	Ipfiles     []ipfile.DownloadFile //The details of the vendor IP Files to be converted to SQL such as their URLs
+	Dbtypes     []string              //Database types to use: sqlite, duckdb, or both
 }
 
 func addTrailingSlash(strIn string) string {
@@ -38,11 +39,18 @@ func NewConfig() Config {
 	dbdir := addTrailingSlash(viper.GetString("dbdir"))
 	downloaddir := addTrailingSlash(viper.GetString("downloaddir"))
 
+	// Default to sqlite if not specified
+	dbtypes := viper.GetStringSlice("dbtypes")
+	if len(dbtypes) == 0 {
+		dbtypes = []string{"sqlite"}
+	}
+
 	newConfig := Config{
 		Dbfile:      viper.GetString("dbfile"),
 		Dbdir:       dbdir,
 		Downloaddir: downloaddir,
 		Ipfiles:     ipfiles,
+		Dbtypes:     dbtypes,
 	}
 
 	return newConfig

@@ -1,0 +1,62 @@
+2026/02/25 21:01:51 Initialized sqlite database
+2026/02/25 21:01:51 Initialized duckdb database
+2026/02/25 21:01:51 Setting up sqlite database schema
+2026/02/25 21:01:51 Setting up duckdb database schema
+2026/02/25 21:01:51 Downloading https://api.hackertarget.com/aslookup/?q=AS36351 to downloadedfiles//softlayer-ibm.ip.txt
+2026/02/25 21:01:53 Downloading https://api.github.com/meta to downloadedfiles//github.ip.txt
+2026/02/25 21:02:06 Downloading https://download.microsoft.com/download/7/1/d/71d86715-5596-4529-9b13-da13a5de5b63/ServiceTags_Public_20260223.json to downloadedfiles//azure-public-cloud.ip.txt
+2026/02/25 21:03:45 Downloading https://www.gstatic.com/ipranges/cloud.json to downloadedfiles//google-cloud.ip.txt
+2026/02/25 21:03:47 Downloading https://www.gstatic.com/ipranges/goog.json to downloadedfiles//goog.ip.txt
+2026/02/25 21:03:47 Downloading https://ip-ranges.amazonaws.com/ip-ranges.json to downloadedfiles//aws-ips.ip.txt
+2026/02/25 21:04:08 Downloading https://api.hackertarget.com/aslookup/?q=AS15169 to downloadedfiles//vercel-aws.ip.txt
+2026/02/25 21:04:11 Downloading https://api.hackertarget.com/aslookup/?q=AS14618 to downloadedfiles//heroku-aws.ip.txt
+2026/02/25 21:04:14 Downloading https://digitalocean.com/geo/google.csv to downloadedfiles//digitalocean.ip.txt
+2026/02/25 21:04:17 Downloading https://www.cloudflare.com/ips-v4 to downloadedfiles//cloudflare-ipv4.ip.txt
+2026/02/25 21:04:17 Downloading https://www.cloudflare.com/ips-v6 to downloadedfiles//cloudflare-ipv6.ip.txt
+2026/02/25 21:04:17 Downloading https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json to downloadedfiles//oracle-public.ip.txt
+2026/02/25 21:04:21 Downloading https://geoip.linode.com/ to downloadedfiles//linode.ip.txt
+2026/02/25 21:04:37 Downloading https://api.hackertarget.com/aslookup/?q=AS55293 to downloadedfiles//a2hosting.ip.txt
+2026/02/25 21:04:38 Downloading https://api.hackertarget.com/aslookup/?q=AS26496 to downloadedfiles//godaddy-AS26496.ip.txt
+2026/02/25 21:04:39 Downloading https://api.hackertarget.com/aslookup/?q=AS30083 to downloadedfiles//godaddy-AS30083.ip.txt
+2026/02/25 21:04:39 Downloading https://api.hackertarget.com/aslookup/?q=AS26347 to downloadedfiles//dreamhost-AS26347.ip.txt
+2026/02/25 21:04:39 Downloading https://api.hackertarget.com/aslookup/?q=AS45102 to downloadedfiles//alibaba-AS45102.ip.txt
+2026/02/25 21:04:42 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS45090 to downloadedfiles//tencent-AS45090.ip.txt
+2026/02/25 21:04:48 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS13335 to downloadedfiles//ibmcloud-AS13335.ip.txt
+2026/02/25 21:04:55 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS12876 to downloadedfiles//scaleway-AS12876.ip.txt
+2026/02/25 21:04:55 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS24940 to downloadedfiles//hetzner-AS24940.ip.txt
+2026/02/25 21:04:55 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS20473 to downloadedfiles//vultr-AS20473.ip.txt
+2026/02/25 21:05:00 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS20473 to downloadedfiles//vultr-AS20473.ip.txt
+2026/02/25 21:05:00 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS26496 to downloadedfiles//godaddy-AS26496.ip.txt
+2026/02/25 21:05:01 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS398101 to downloadedfiles//godaddy-AS30083.ip.txt
+2026/02/25 21:05:02 Downloading https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS7506 to downloadedfiles//gmo-AS7506.ip.txt
+---------------------------------------
+softlayer/ibm, Success: 349, Failed: 0
+github, Success: 4950, Failed: 0
+azure, Success: 36833, Failed: 0
+google, Success: 836, Failed: 0
+google, Success: 91, Failed: 0
+aws, Success: 7421, Failed: 0
+vercel/aws, Success: 851, Failed: 0
+heroku/aws, Success: 1094, Failed: 0
+digitalocean, Success: 1055, Failed: 0
+cloudflare, Success: 15, Failed: 0
+cloudflare, Success: 0, Failed: 0
+oracle, Success: 1047, Failed: 0
+linode, Success: 5132, Failed: 0
+a2hosting, Success: 99, Failed: 0
+godaddy, Success: 189, Failed: 0
+godaddy, Success: 115, Failed: 0
+dreamhost, Success: 24, Failed: 0
+alibaba, Success: 957, Failed: 0
+tencent, Success: 2215, Failed: 0
+ibmcloud, Success: 2474, Failed: 0
+scaleway, Success: 21, Failed: 0
+Hetzner, Success: 85, Failed: 0
+Vultr, Success: 1617, Failed: 0
+Vultr, Success: 0, Failed: 0
+GoDaddy, Success: 7, Failed: 0
+GoDaddy, Success: 240, Failed: 0
+gmo, Success: 40, Failed: 0
+---------------------------------------
+2026/02/25 21:05:02 Closing duckdb database
+2026/02/25 21:05:07 Closing sqlite database

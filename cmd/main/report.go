@@ -36,7 +36,7 @@ func printReport(report []reportEntry) {
 
 	fmt.Printf("%s\n", strings.Repeat("-", lineLength))
 	for _, y := range lines {
-		fmt.Printf(y)
+		fmt.Print(y)
 	}
 	fmt.Printf("%s\n", strings.Repeat("-", lineLength))
 

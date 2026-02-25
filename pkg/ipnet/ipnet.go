@@ -9,11 +9,11 @@ import (
 )
 
 type cidrObject struct {
-	CidrDecimal    int
+	CidrDecimal    int64
 	NetIP          net.IP
 	BcastIP        net.IP
-	NetIPDecimal   int
-	BcastIPDecimal int
+	NetIPDecimal   int64
+	BcastIPDecimal int64
 	Iptype         string
 }
 
@@ -63,24 +63,16 @@ func isZeros(p net.IP) bool {
 	return true
 }
 
-func IPv4toDecimal(ipIn net.IP) (decimalOut int) {
+func IPv4toDecimal(ipIn net.IP) (decimalOut int64) {
 	//Convert an IP4 Address to a decimal
 	ipOct := net.IP.To4(ipIn)
 	if ipOct == nil {
 		return 0
 	}
-	octInts := [4]int{int(ipOct[0]) * 16777216, int(ipOct[1]) * 65536, int(ipOct[2]) * 256, int(ipOct[3])}
+	octInts := [4]int64{int64(ipOct[0]) * 16777216, int64(ipOct[1]) * 65536, int64(ipOct[2]) * 256, int64(ipOct[3])}
 
 	for _, value := range octInts {
 		decimalOut = decimalOut + value
 	}
 	return decimalOut
-}
-
-// IPtoString converts both IPv4 and IPv6 addresses to their string representation
-func IPtoString(ipIn net.IP) string {
-	if ipIn == nil {
-		return ""
-	}
-	return ipIn.String()
 }

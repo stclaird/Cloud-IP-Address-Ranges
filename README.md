@@ -1,5 +1,5 @@
 # Cloud IP Address Ranges
-A simple tool for importing IP and CIDR records from large and large-ish cloud or hosting providers and outputing them as a [SQLlite database](https://github.com/stclaird/cloudIPtoDB/releases/download/v1.0.0/cloudIP.sqlite3.db) and [clear text files](https://github.com/stclaird/cloudIPtoDB/tree/main/ipfiles). Currently, the project imports IP CIDR networks from the following providers:
+A simple tool for importing IP and CIDR records from large and large-ish cloud or hosting providers and outputing them as a [SQLite database](https://github.com/stclaird/cloudIPtoDB/releases/download/v1.0.0/cloudIP.sqlite3.db), DuckDB database, and [clear text files](https://github.com/stclaird/cloudIPtoDB/tree/main/ipfiles). Currently, the project imports IP CIDR networks from the following providers:
 
 | Provider                  | Method                       |
 | ------------------------- | ---------------------------- |
@@ -28,16 +28,20 @@ A simple tool for importing IP and CIDR records from large and large-ish cloud o
 # Technology Stack
 
 The two core elements of this project are:
- - A binary written in GoLang which creates a SQLite database object and populates it with IP CIDR data from various Cloud platform providers.
- - A SQLite database file output containing the Cloud platform provider's CIDR information.
+ - A binary written in GoLang which creates SQLite and/or DuckDB database objects and populates them with IP CIDR data from various Cloud platform providers.
+ - Database file outputs (SQLite and/or DuckDB) containing the Cloud platform provider's CIDR information.
 
-The SQLite database schema is made up of a single 'net' table.  
+You can configure which database types to output in the [config.yaml](cmd/main/config/config.yaml) file:
+```yaml
+dbtypes: ["sqlite", "duckdb"]  # Options: sqlite, duckdb, or both
+```
+
+The database schema is made up of a single 'net' table.  
 
 ```CREATE TABLE IF NOT EXISTS net (
- 	net_id INTEGER PRIMARY KEY,
- 	net TEXT NOT NULL,
- 	start_ip INT NOT NULL,
- 	end_ip INT NOT NULL,
+ 	net TEXT PRIMARY KEY,
+ 	start_ip BIGINT NOT NULL,
+ 	end_ip BIGINT NOT NULL,
  	url TEXT NOT NULL,
  	cloudplatform TEXT NOT NULL,
  	iptype TEXT NOT NULL

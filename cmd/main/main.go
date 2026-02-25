@@ -15,10 +15,43 @@ import (
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/repository"
 
 	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/marcboeker/go-duckdb"
 )
 
 var confObj config.Config
-var db *sql.DB
+var databases map[string]*sql.DB
+
+func initDatabase(dbType string) (*sql.DB, error) {
+	var dbPath string
+	var driver string
+	
+	switch dbType {
+	case "sqlite":
+		driver = "sqlite3"
+		dbPath = fmt.Sprintf("%s/%s.sqlite3.db", confObj.Dbdir, confObj.Dbfile)
+		// SQLite requires file to be created first
+		file, err := os.Create(dbPath)
+		if err != nil {
+			return nil, fmt.Errorf("os Create Error: %w", err)
+		}
+		file.Close()
+	case "duckdb":
+		driver = "duckdb"
+		dbPath = fmt.Sprintf("%s/%s.duckdb", confObj.Dbdir, confObj.Dbfile)
+		// DuckDB creates its own file, so remove if exists first
+		os.Remove(dbPath)
+	default:
+		return nil, fmt.Errorf("unsupported database type: %s", dbType)
+	}
+
+	// Open database connection
+	db, err := sql.Open(driver, dbPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open %s database: %w", dbType, err)
+	}
+
+	return db, nil
+}
 
 func init() {
 	confObj = config.NewConfig()
@@ -32,25 +65,23 @@ func init() {
 		log.Fatal(err)
 	}
 
-	os.MkdirAll(confObj.Dbdir, 0755)
+	err = os.MkdirAll(confObj.Dbdir, 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	full_path := fmt.Sprintf("%s/%s", confObj.Dbdir, confObj.Dbfile)
-	file, err := os.Create(full_path)
+	// Initialize databases map
+	databases = make(map[string]*sql.DB)
 
-	if err != nil {
-		log.Println("Os Create Error: ", err)
+	// Initialize each requested database type
+	for _, dbType := range confObj.Dbtypes {
+		db, err := initDatabase(dbType)
+		if err != nil {
+			log.Fatalf("Failed to initialize %s database: %v", dbType, err)
+		}
+		databases[dbType] = db
+		log.Printf("Initialized %s database", dbType)
 	}
-
-	file.Close()
-
-	db, err = sql.Open("sqlite3", full_path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 }
 
 func main() {
@@ -59,11 +90,25 @@ func main() {
 
 	ctx := context.Background()
 
-	defer db.Close()
-	model.SetupDB(db)
+	// Close all databases on exit
+	defer func() {
+		for dbType, db := range databases {
+			log.Printf("Closing %s database", dbType)
+			db.Close()
+		}
+	}()
 
-	cidrRepo := repository.NewCidrRepository(db)
+	// Setup all databases
+	for dbType, db := range databases {
+		log.Printf("Setting up %s database schema", dbType)
+		model.SetupDB(db)
+	}
 
+	// Create repositories for each database
+	cidrRepos := make(map[string]repository.CidrRepository)
+	for dbType, db := range databases {
+		cidrRepos[dbType] = repository.NewCidrRepository(db)
+	}
 
 	var report []reportEntry //create a report struct to keep track of inserts
 
@@ -117,14 +162,22 @@ func main() {
 				Cloudplatform: i.Cloudplatform,
 				Iptype:        processedCidr.Iptype,
 			}
-			_, exists := cidrRepo.FindByNet(ctx, c.Net)
-			if !exists {
-				err := cidrRepo.Insert(ctx,c)
-				//record inserts
-				if err != nil {
-					entry.IncrementFailed()
-				} else {
-					entry.IncrementSuccess()
+			
+			// Insert into all configured databases
+			for dbType, cidrRepo := range cidrRepos {
+				_, exists := cidrRepo.FindByNet(ctx, c.Net)
+				if !exists {
+					err := cidrRepo.Insert(ctx, c)
+					if err != nil {
+						if dbType == confObj.Dbtypes[0] { // Only count once
+							entry.IncrementFailed()
+						}
+						log.Printf("Failed to insert into %s: %v", dbType, err)
+					} else {
+						if dbType == confObj.Dbtypes[0] { // Only count once
+							entry.IncrementSuccess()
+						}
+					}
 				}
 			}
 		}
