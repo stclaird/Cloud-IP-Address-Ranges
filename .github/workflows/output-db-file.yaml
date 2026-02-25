@@ -14,7 +14,7 @@ jobs:
       - name: Checkout CloudIP
         uses: actions/checkout@v3
         with:
-          repository: piuniverse/cloudIPtoDB
+          repository: stclaird/Cloud-IP-Address-Ranges
 
       - name: Create SQLite File
         run: |-
