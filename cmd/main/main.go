@@ -7,7 +7,6 @@ import (
 	"flag"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/config"
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/ipfile"
@@ -29,7 +28,7 @@ func initDatabase(dbType string) (*sql.DB, error) {
 	switch dbType {
 	case "sqlite":
 		driver = "sqlite3"
-		dbPath = fmt.Sprintf("%s/%s", confObj.Dbdir, confObj.Dbfile)
+		dbPath = fmt.Sprintf("%s/%s.sqlite3.db", confObj.Dbdir, confObj.Dbfile)
 		// SQLite requires file to be created first
 		file, err := os.Create(dbPath)
 		if err != nil {
@@ -38,9 +37,7 @@ func initDatabase(dbType string) (*sql.DB, error) {
 		file.Close()
 	case "duckdb":
 		driver = "duckdb"
-		// Replace .sqlite3.db extension with .duckdb
-		dbFileName := strings.ReplaceAll(confObj.Dbfile, ".sqlite3.db", ".duckdb")
-		dbPath = fmt.Sprintf("%s/%s", confObj.Dbdir, dbFileName)
+		dbPath = fmt.Sprintf("%s/%s.duckdb", confObj.Dbdir, confObj.Dbfile)
 		// DuckDB creates its own file, so remove if exists first
 		os.Remove(dbPath)
 	default:
