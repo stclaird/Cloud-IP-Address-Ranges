@@ -1,6 +1,14 @@
 downloaddir: "downloadedfiles"
-dbfile : cloudIP.sqlite3.db
+dbfile : cloudIP.sqlite3.db  # Legacy field - kept for backward compatibility
 dbdir  : "db-output"
+
+# Database configurations - supports multiple databases
+# Uncomment/add entries to generate SQLite, DuckDB, or both
+databases:
+  - type: "sqlite"
+    filename: "cloudIP.sqlite3.db"
+  - type: "duckdb"
+    filename: "cloudIP.duckdb"
 
 ipfiles:
   - cloudplatform: "softlayer/ibm"

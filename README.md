@@ -36,16 +36,19 @@ The two core elements of this project are:
 
 The SQLite database schema is made up of a single 'net' table.  
 
-```CREATE TABLE IF NOT EXISTS net (
- 	net_id INTEGER PRIMARY KEY,
- 	net TEXT NOT NULL,
- 	start_ip INT NOT NULL,
- 	end_ip INT NOT NULL,
+```sql
+CREATE TABLE IF NOT EXISTS net (
+ 	net TEXT PRIMARY KEY,
+ 	start_ip TEXT NOT NULL,
+ 	end_ip TEXT NOT NULL,
  	url TEXT NOT NULL,
  	cloudplatform TEXT NOT NULL,
  	iptype TEXT NOT NULL
  	);
  ```
+
+**Note:** The `start_ip` and `end_ip` fields store IP addresses as TEXT (e.g., "192.168.1.0") to support both IPv4 and IPv6 addresses.
+**Note:** The `iptype` field indicates whether the record is "IPv4" or "IPv6".
 # Use the database for local querying
 
 These instructions describe how to use the sqlite file on your workstation for local querying
@@ -122,29 +125,69 @@ sqlite>
 
 ### 4. Find if a specific IP address exists in one of the cidrs held in the database.
 
-The records in the database are in CIDR network format, and not unpacked and stored as individual IPv4 addresses.
-Unpacking the CIDRs into a individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
-However, the downside of not having individual IP addresses stored as seperate records is it does make querying for specific IPs using SQL difficult.
+The records in the database are in CIDR network format, and not unpacked and stored as individual IP addresses.
+Unpacking the CIDRs into individual IP records generally doesn't make sense as it would be time consuming to unpack them all and create a much larger than necessary database.
 
-To remedy this and allow for the querying of individual IP addresses, we also store some additional columns along side the CIDR record, the start (network) and end (broadcast) address. These records are both stored as integers and this means we are able to query whether a specific IP address record exists in the database by testing if the IP address falls between the start record and the end record.
+To allow for the querying of individual IP addresses, we also store the start (network) and end (broadcast) address alongside the CIDR record. These are stored as TEXT fields containing the IP addresses.
 
-One thing though, for this to work you do need to convert your IP address to an integer before running a query.
-For example, if you want to know if the IP address `177.71.207.129` is within one of the CIDR records stored in the database:
+#### Method 1: Direct CIDR Matching (Simplest)
 
-Firstly, you need to convert this IPv4 address to a decimal integer, which is 2974273409. Once you have the IP as an integer you can then perform the following query, where the value for the start_ip and end_ip columns are this integer:
+For basic lookups, you can search within the CIDR text itself:
 
-```
-SELECT cloudplatform, net
+```sql
+SELECT cloudplatform, net, iptype
 FROM net
-WHERE start_ip <= '2974273409'
-AND end_ip >= '2974273409';
+WHERE net LIKE '177.71.%';
 ```
-If this IP address is contained within one of the CIDR records, this query will return a CIDR record similar to the following,
 
+This will return all CIDR ranges that start with those octets.
+
+#### Method 2: Using Start/End IP Comparison (More Accurate)
+
+**For IPv4 addresses:**
+
+To check if IP `8.8.8.8` is in the database:
+
+```sql
+SELECT cloudplatform, net, start_ip, end_ip
+FROM net
+WHERE iptype = 'IPv4'
+AND start_ip <= '8.8.8.8'
+AND end_ip >= '8.8.8.8';
 ```
-aws|177.71.128.0/17
-aws|177.71.207.128/26
+
+Example result:
 ```
-otherwise, if the IP address is not stored then the database will return no records.
+google|8.8.8.0/24|8.8.8.0|8.8.8.255
+```
+
+**For IPv6 addresses:**
+
+To check if IPv6 address `2001:4860:4860::8888` is in the database:
+
+```sql
+SELECT cloudplatform, net, start_ip, end_ip
+FROM net
+WHERE iptype = 'IPv6'
+AND start_ip <= '2001:4860:4860::8888'
+AND end_ip >= '2001:4860:4860::8888';
+```
+
+**Note:** SQLite's text comparison works for basic IP address range checks but may not be perfectly accurate for all edge cases. For production use, consider using application-level IP range checking with proper CIDR libraries.
+
+#### Method 3: Filter by IP Type
+
+To see only IPv4 or IPv6 records:
+
+```sql
+-- Only IPv4 records
+SELECT * FROM net WHERE iptype = 'IPv4' LIMIT 10;
+
+-- Only IPv6 records
+SELECT * FROM net WHERE iptype = 'IPv6' LIMIT 10;
+
+-- Count by IP type
+SELECT iptype, COUNT(*) as count FROM net GROUP BY iptype;
+```
 
 

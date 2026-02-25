@@ -2,23 +2,20 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"flag"
 	"log"
 	"os"
 
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/config"
+	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/database"
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/ipfile"
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/ipnet"
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/model"
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/repository"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 var confObj config.Config
-var db *sql.DB
 
 func init() {
 	confObj = config.NewConfig()
@@ -32,25 +29,10 @@ func init() {
 		log.Fatal(err)
 	}
 
-	os.MkdirAll(confObj.Dbdir, 0755)
+	err = os.MkdirAll(confObj.Dbdir, 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	full_path := fmt.Sprintf("%s/%s", confObj.Dbdir, confObj.Dbfile)
-	file, err := os.Create(full_path)
-
-	if err != nil {
-		log.Println("Os Create Error: ", err)
-	}
-
-	file.Close()
-
-	db, err = sql.Open("sqlite3", full_path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 }
 
 func main() {
@@ -59,19 +41,16 @@ func main() {
 
 	ctx := context.Background()
 
-	defer db.Close()
-	model.SetupDB(db)
+	// Download and process IP data once
+	var allCidrs []model.Cidr
+	var report []reportEntry
 
-	cidrRepo := repository.NewCidrRepository(db)
-
-
-	var report []reportEntry //create a report struct to keep track of inserts
-
+	log.Println("Downloading and processing IP data...")
+	
 	for _, i := range confObj.Ipfiles {
-
 		var cidrs []string
 
-		var entry = reportEntry{ //init report struct entry for each cloud provider
+		var entry = reportEntry{
 			CloudPlatform: i.Cloudplatform,
 			Success:       0,
 			Failed:        0,
@@ -85,11 +64,12 @@ func main() {
 		var err error
 		switch i.Cloudplatform {
 		case "azure":
-			url, err = ipfile.ResolveAzureDownloadUrl(*debugDownload) //azure download file changes so we need to figure out what the latest path is
+			url, err = ipfile.ResolveAzureDownloadUrl(*debugDownload)
 		}
 
 		if err != nil {
-			break
+			log.Printf("Error resolving URL for %s: %v", i.Cloudplatform, err)
+			continue
 		}
 
 		FileObj := ipfile.IpfileTXT{
@@ -105,10 +85,10 @@ func main() {
 			processedCidr, err := ipnet.PrepareCidrforDB(cidr)
 			if err != nil {
 				fmt.Println("Error: ", err)
+				entry.IncrementFailed()
 				continue
 			}
 
-			// Support both IPv4 and IPv6
 			c := model.Cidr{
 				Net:           cidr,
 				Start_ip:      processedCidr.NetIPString,
@@ -117,20 +97,69 @@ func main() {
 				Cloudplatform: i.Cloudplatform,
 				Iptype:        processedCidr.Iptype,
 			}
+			allCidrs = append(allCidrs, c)
+			entry.IncrementSuccess()
+		}
+		
+		report = append(report, entry)
+		ipfile.WriteFile(downloadto, cidrs)
+	}
+
+	log.Printf("Processed %d CIDR records", len(allCidrs))
+
+	// Now insert into each configured database
+	for _, dbConfig := range confObj.Databases {
+		log.Printf("\n=== Creating %s database: %s ===", dbConfig.Type, dbConfig.Filename)
+		
+		fullPath := fmt.Sprintf("%s%s", confObj.Dbdir, dbConfig.Filename)
+		
+		// Create database file
+		file, err := os.Create(fullPath)
+		if err != nil {
+			log.Printf("Error creating %s: %v", fullPath, err)
+			continue
+		}
+		file.Close()
+
+		// Connect to database
+		db, err := database.NewDatabase(database.DBConfig{
+			Type:     database.DBType(dbConfig.Type),
+			FilePath: fullPath,
+		})
+		if err != nil {
+			log.Printf("Error opening %s database: %v", dbConfig.Type, err)
+			continue
+		}
+
+		// Setup schema
+		if err := db.Setup(); err != nil {
+			log.Printf("Error setting up %s database: %v", dbConfig.Type, err)
+			db.Close()
+			continue
+		}
+
+		// Insert data
+		cidrRepo := repository.NewCidrRepository(db.GetDB())
+		
+		inserted := 0
+		failed := 0
+		
+		for _, c := range allCidrs {
 			_, exists := cidrRepo.FindByNet(ctx, c.Net)
 			if !exists {
-				err := cidrRepo.Insert(ctx,c)
-				//record inserts
-				if err != nil {
-					entry.IncrementFailed()
+				if err := cidrRepo.Insert(ctx, c); err != nil {
+					failed++
 				} else {
-					entry.IncrementSuccess()
+					inserted++
 				}
 			}
 		}
-		report = append(report, entry)
-		ipfile.WriteFile(downloadto, cidrs) //overwrite downloaded file with IP address info only
+
+		db.Close()
+		
+		log.Printf("✓ %s: Inserted %d records, Failed %d", dbConfig.Filename, inserted, failed)
 	}
 
+	log.Println("\n=== Summary Report ===")
 	printReport(report)
 }
