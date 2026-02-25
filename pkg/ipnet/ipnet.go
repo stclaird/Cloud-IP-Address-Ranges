@@ -14,8 +14,6 @@ type cidrObject struct {
 	BcastIP        net.IP
 	NetIPDecimal   int
 	BcastIPDecimal int
-	NetIPString    string
-	BcastIPString  string
 	Iptype         string
 }
 
@@ -32,15 +30,13 @@ func PrepareCidrforDB(cidrIn string) (cidrOut cidrObject, err error) {
 	cidrOut.NetIP = netaddr.NetworkAddr(ipnet)
 	cidrOut.Iptype = IpType(fmt.Sprintf("%q", cidrOut.NetIP))
 	
-	// Store string representations for both IPv4 and IPv6
-	cidrOut.NetIPString = IPtoString(cidrOut.NetIP)
-	cidrOut.BcastIPString = IPtoString(cidrOut.BcastIP)
-	
-	// For IPv4, also store decimal representation (for backward compatibility)
-	if cidrOut.Iptype == "IPv4" {
-		cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
-		cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
+	// Only support IPv4 for now
+	if cidrOut.Iptype != "IPv4" {
+		return cidrOut, fmt.Errorf("only IPv4 addresses are supported")
 	}
+	
+	cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
+	cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
 
 	return cidrOut, nil
 }

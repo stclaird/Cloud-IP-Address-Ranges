@@ -108,11 +108,11 @@ func main() {
 				continue
 			}
 
-			// Support both IPv4 and IPv6
+			// Only IPv4 addresses
 			c := model.Cidr{
 				Net:           cidr,
-				Start_ip:      processedCidr.NetIPString,
-				End_ip:        processedCidr.BcastIPString,
+				Start_ip:      processedCidr.NetIPDecimal,
+				End_ip:        processedCidr.BcastIPDecimal,
 				Url:           i.Url,
 				Cloudplatform: i.Cloudplatform,
 				Iptype:        processedCidr.Iptype,
