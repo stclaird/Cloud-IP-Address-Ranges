@@ -8,3 +8,4 @@ ipfiles:
 downloaddir: "downloadfiles/"
 dbfile : cloudIP.sqlite3.db
 dbdir  : "output/"
+dbtypes: ["sqlite"]  # Options: sqlite, duckdb, or ["sqlite", "duckdb"] for both

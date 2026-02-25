@@ -17,8 +17,8 @@ type Cidr struct {
 const createNetDB string = `
 CREATE TABLE IF NOT EXISTS net (
 	net TEXT PRIMARY KEY,
-	start_ip INT NOT NULL,
-	end_ip INT NOT NULL,
+	start_ip BIGINT NOT NULL,
+	end_ip BIGINT NOT NULL,
 	url TEXT NOT NULL,
 	cloudplatform TEXT NOT NULL,
 	iptype TEXT NOT NULL
