@@ -1,8 +1,8 @@
 package ipfile
 
 import (
-	"bytes"
 	"bufio"
+	"bytes"
 	"crypto/tls"
 	"encoding/csv"
 	"encoding/json"
@@ -47,7 +47,7 @@ func (c azureCandidateCollector) Collect(_ int, s *goquery.Selection) {
 	}
 }
 
-func checkResponse( StatusCode int) bool{
+func checkResponse(StatusCode int) bool {
 	if StatusCode >= 200 && StatusCode < 300 {
 		return true
 	}
@@ -101,20 +101,20 @@ func (i *Common) Download(DownloadFileName string, Url string) (err error) {
 	return nil
 }
 
-func WriteFile(DownloadFileName string, cidrs []string ) {
+func WriteFile(DownloadFileName string, cidrs []string) {
 	f, err := os.Create(DownloadFileName)
-    if err != nil {
-        log.Fatal(err)
-    }
-    // remember to close the file
-    defer f.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// remember to close the file
+	defer f.Close()
 
-    for _, cidr := range cidrs {
-        _, err := f.WriteString(cidr + "\n")
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
+	for _, cidr := range cidrs {
+		_, err := f.WriteString(cidr + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 type IpfileJson struct {
@@ -127,20 +127,20 @@ type IpfileTXT struct {
 	Prefixes []string
 }
 
-func IPtoCidr(str_in string)(string) {
+func IPtoCidr(str_in string) string {
 	//Ensure an IP address has a slash (cidr Notation)
 	contains := strings.Contains(str_in, "/")
 
 	if contains {
 		return str_in
 	}
-	
+
 	// Detect IP type and add appropriate suffix
 	if strings.Contains(str_in, ":") {
 		// IPv6 address
 		return fmt.Sprintf("%s/128", str_in)
 	}
-	
+
 	// IPv4 address
 	return fmt.Sprintf("%s/32", str_in)
 }
@@ -149,9 +149,9 @@ func MatchIp(pattern string) []string {
 	//match ip addresses from string pattern and return slice of ips as string
 	// Match IPv4 addresses only
 	// IPv4
-	reIPv4 := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`) 
+	reIPv4 := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
 	// IPv6 (simple match for groups of hex separated by ':' with optional /prefix)
-	reIPv6 := regexp.MustCompile(`(?:[0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{1,4}(?:/\d{1,3}|)`) 
+	reIPv6 := regexp.MustCompile(`(?:[0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{1,4}(?:/\d{1,3}|)`)
 	// remove timestamps like HH:MM:SS to avoid false positives
 	reTimestamp := regexp.MustCompile(`\b\d{1,2}:\d{2}:\d{2}\b`)
 	clean := reTimestamp.ReplaceAllString(pattern, " ")
@@ -227,7 +227,7 @@ func AsText[T any](DownloadFileName string) []string {
 	var cidrs []string
 	scanner := bufio.NewScanner(file)
 	buf := make([]byte, 0, 64*1024)
-    scanner.Buffer(buf, 1024*1024)
+	scanner.Buffer(buf, 1024*1024)
 
 	for scanner.Scan() {
 		txt := scanner.Text()
@@ -266,18 +266,18 @@ func ResolveAzureDownloadUrl(debug bool) (string, error) {
 	}
 
 	tlsTransport := &http2.Transport{
-        TLSClientConfig: &tls.Config{
-            MaxVersion: tls.VersionTLS12,
-        },
-    }
+		TLSClientConfig: &tls.Config{
+			MaxVersion: tls.VersionTLS12,
+		},
+	}
 
 	client := http.Client{Transport: tlsTransport}
-	req , err := http.NewRequest("GET", downloadPage, nil)
+	req, err := http.NewRequest("GET", downloadPage, nil)
 	if err != nil {
 		return link, err
 	}
 
-	resp , err := client.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -333,4 +333,3 @@ func ResolveAzureDownloadUrl(debug bool) (string, error) {
 
 	return link, nil
 }
-
