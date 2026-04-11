@@ -148,9 +148,26 @@ func IPtoCidr(str_in string)(string) {
 func MatchIp(pattern string) []string {
 	//match ip addresses from string pattern and return slice of ips as string
 	// Match IPv4 addresses only
-	reIPv4 := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
-	result := reIPv4.FindAllString(pattern, -1)
-	return result
+	// IPv4
+	reIPv4 := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`) 
+	// IPv6 (simple match for groups of hex separated by ':' with optional /prefix)
+	reIPv6 := regexp.MustCompile(`(?:[0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{1,4}(?:/\d{1,3}|)`) 
+	// remove timestamps like HH:MM:SS to avoid false positives
+	reTimestamp := regexp.MustCompile(`\b\d{1,2}:\d{2}:\d{2}\b`)
+	clean := reTimestamp.ReplaceAllString(pattern, " ")
+
+	var results []string
+	results = append(results, reIPv4.FindAllString(clean, -1)...)
+	// Filter IPv6-like matches to avoid timestamps like HH:MM:SS
+	ipv6cands := reIPv6.FindAllString(clean, -1)
+	for _, s := range ipv6cands {
+		// if candidate has exactly two colons and contains no hex letters, it's likely a timestamp
+		if strings.Count(s, ":") == 2 && !strings.ContainsAny(s, "abcdefABCDEF") {
+			continue
+		}
+		results = append(results, s)
+	}
+	return results
 }
 
 func StrInSlice(str string, slice []string) bool {

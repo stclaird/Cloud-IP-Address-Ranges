@@ -8,16 +8,18 @@ import (
 )
 
 type CidrRepo struct {
-	DB *sql.DB
+	DB     *sql.DB
+	DbType string
 }
 
-func NewCidrRepository(db *sql.DB) CidrRepository {
+func NewCidrRepository(db *sql.DB, dbType string) CidrRepository {
 	return &CidrRepo{
-		DB: db,
+		DB:     db,
+		DbType: dbType,
 	}
 }
 
 type CidrRepository interface {
 	Insert(ctx context.Context, cidr model.Cidr) error
-	FindByNet(ctx context.Context, net string) ( error, bool)
+	FindByNet(ctx context.Context, net string) (error, bool)
 }

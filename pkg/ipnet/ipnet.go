@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strings"
 
 	"gopkg.in/netaddr.v1"
 )
@@ -19,6 +20,21 @@ type cidrObject struct {
 
 func PrepareCidrforDB(cidrIn string) (cidrOut cidrObject, err error) {
 	//Process a Cidr and return first address (net), and last address (bcast)
+	// Normalize some malformed IPv6 forms like "2602:ff03:4d5/128"
+	// to a valid compressed form "2602:ff03:4d5::/128" so parsing succeeds.
+	if strings.Contains(cidrIn, ":") && !strings.Contains(cidrIn, "::") {
+		parts := strings.SplitN(cidrIn, "/", 2)
+		addr := parts[0]
+		if strings.Count(addr, ":") < 7 {
+			addr = addr + "::"
+			if len(parts) == 2 {
+				cidrIn = addr + "/" + parts[1]
+			} else {
+				cidrIn = addr
+			}
+		}
+	}
+
 	_, ipnet, err := net.ParseCIDR(cidrIn)
 
 	if err != nil {
@@ -29,14 +45,15 @@ func PrepareCidrforDB(cidrIn string) (cidrOut cidrObject, err error) {
 	cidrOut.BcastIP = netaddr.BroadcastAddr(ipnet)
 	cidrOut.NetIP = netaddr.NetworkAddr(ipnet)
 	cidrOut.Iptype = IpType(fmt.Sprintf("%q", cidrOut.NetIP))
-	
-	// Only support IPv4 for now
-	if cidrOut.Iptype != "IPv4" {
-		return cidrOut, fmt.Errorf("only IPv4 addresses are supported")
+
+	// If IPv4 populate decimal representations; for IPv6 leave decimals zero and use textual fields
+	if cidrOut.Iptype == "IPv4" {
+		cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
+		cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
+	} else {
+		cidrOut.NetIPDecimal = 0
+		cidrOut.BcastIPDecimal = 0
 	}
-	
-	cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
-	cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
 
 	return cidrOut, nil
 }

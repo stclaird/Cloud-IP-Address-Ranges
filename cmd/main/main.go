@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 
@@ -14,8 +14,8 @@ import (
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/model"
 	"github.com/stclaird/Cloud-IP-Address-Ranges/pkg/repository"
 
-	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/marcboeker/go-duckdb"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var confObj config.Config
@@ -24,7 +24,7 @@ var databases map[string]*sql.DB
 func initDatabase(dbType string) (*sql.DB, error) {
 	var dbPath string
 	var driver string
-	
+
 	switch dbType {
 	case "sqlite":
 		driver = "sqlite3"
@@ -101,13 +101,13 @@ func main() {
 	// Setup all databases
 	for dbType, db := range databases {
 		log.Printf("Setting up %s database schema", dbType)
-		model.SetupDB(db)
+		model.SetupDB(db, dbType)
 	}
 
 	// Create repositories for each database
 	cidrRepos := make(map[string]repository.CidrRepository)
 	for dbType, db := range databases {
-		cidrRepos[dbType] = repository.NewCidrRepository(db)
+		cidrRepos[dbType] = repository.NewCidrRepository(db, dbType)
 	}
 
 	var report []reportEntry //create a report struct to keep track of inserts
@@ -153,18 +153,35 @@ func main() {
 				continue
 			}
 
-			// Only IPv4 addresses
+			// Build model with both numeric and textual start/end (text used by DuckDB for IPv6)
 			c := model.Cidr{
 				Net:           cidr,
 				Start_ip:      processedCidr.NetIPDecimal,
 				End_ip:        processedCidr.BcastIPDecimal,
+				Start_ip_text: "",
+				End_ip_text:   "",
 				Url:           i.Url,
 				Cloudplatform: i.Cloudplatform,
 				Iptype:        processedCidr.Iptype,
 			}
-			
+			if processedCidr.Iptype == "IPv6" {
+				c.Start_ip_text = processedCidr.NetIP.String()
+				c.End_ip_text = processedCidr.BcastIP.String()
+				c.Start_ip = 0
+				c.End_ip = 0
+			} else {
+				// IPv4: also populate textual (dotted) forms for DuckDB/inet
+				c.Start_ip_text = processedCidr.NetIP.String()
+				c.End_ip_text = processedCidr.BcastIP.String()
+			}
+
 			// Insert into all configured databases
 			for dbType, cidrRepo := range cidrRepos {
+				// Skip non-duckdb databases for IPv6 entries
+				if c.Iptype == "IPv6" && dbType != "duckdb" {
+					continue
+				}
+
 				_, exists := cidrRepo.FindByNet(ctx, c.Net)
 				if !exists {
 					err := cidrRepo.Insert(ctx, c)
